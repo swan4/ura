@@ -1,106 +1,13 @@
 // ==========================================
-// 1. IER GOLD PARTICLE & SPOTLIGHT BACKGROUND
-// ==========================================
-(function initIerBackground() {
-  var root = document.querySelector('.ier-bg');
-  if (!root) return;
-  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var cv = root.querySelector('canvas');
-  if (!cv) return;
-  var ctx = cv.getContext('2d');
-  var W, H, dpr = Math.min(window.devicePixelRatio || 1, 2), parts = [], running = false, raf, last = 0;
-
-  function spawn(initial) {
-    return {
-      x: Math.random() * W,
-      y: initial ? Math.random() * H : H + 10,
-      r: 0.4 + Math.random() * 1.7,
-      vy: -(0.1 + Math.random() * 0.4),
-      vx: (Math.random() - 0.5) * 0.15,
-      t: Math.random() * 6.28,
-      ts: 0.008 + Math.random() * 0.025,
-      a: 0.35 + Math.random() * 0.65
-    };
-  }
-
-  function init() {
-    var r = root.getBoundingClientRect();
-    W = r.width;
-    H = r.height;
-    cv.width = W * dpr;
-    cv.height = H * dpr;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    var n = Math.min(280, Math.round((W * H) / 5000));
-    parts = [];
-    for (var i = 0; i < n; i++) parts.push(spawn(true));
-    if (reduce) draw(0);
-  }
-
-  function draw(k) {
-    ctx.clearRect(0, 0, W, H);
-    for (var i = 0; i < parts.length; i++) {
-      var p = parts[i];
-      p.x += p.vx * k;
-      p.y += p.vy * k;
-      p.t += p.ts * k;
-      if (p.y < -10) {
-        parts[i] = spawn(false);
-        continue;
-      }
-      var a = p.a * (0.3 + 0.7 * Math.abs(Math.sin(p.t))) * Math.min(1, p.y / (H * 0.2));
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, 6.283);
-      ctx.fillStyle = 'rgba(240,210,140,' + (a * 0.8).toFixed(3) + ')';
-      ctx.shadowColor = 'rgba(255,215,140,.9)';
-      ctx.shadowBlur = p.r * 5;
-      ctx.fill();
-    }
-  }
-
-  function frame(ts) {
-    var k = last ? Math.min(3, (ts - last) / 16.7) : 1;
-    last = ts;
-    draw(k);
-    raf = requestAnimationFrame(frame);
-  }
-
-  function start() {
-    if (!running && !reduce) {
-      running = true;
-      last = 0;
-      raf = requestAnimationFrame(frame);
-    }
-  }
-
-  function stop() {
-    running = false;
-    cancelAnimationFrame(raf);
-  }
-
-  init();
-  if (typeof ResizeObserver !== 'undefined') {
-    new ResizeObserver(init).observe(root);
-  } else {
-    window.addEventListener('resize', init);
-  }
-  document.addEventListener('visibilitychange', function () {
-    document.hidden ? stop() : start();
-  });
-  start();
-})();
-
-// ==========================================
-// 2. STATE & PARAMS
+// 1. STATE & PARAMS (100% USD ONLY · DEFAULT SPANISH)
 // ==========================================
 const urlParams = new URLSearchParams(window.location.search);
-const initialLang = urlParams.get('lang') || 'es'; // Default to Spanish for client demo
-const initialCurr = urlParams.get('curr') || 'usd';
+const initialLang = urlParams.get('lang') || 'es'; // Default language: Spanish
 
 const STATE = {
   lang: ['es', 'en', 'ru'].includes(initialLang) ? initialLang : 'es',
-  curr: ['usd', 'rub'].includes(initialCurr) ? initialCurr : 'usd',
   calcTab: 'gold',
-  dealerMargin: 4.8,
+  dealerMargin: 4.8, // 4.8% below spot
 
   // Gold state
   goldPurity: 0.585,
@@ -121,11 +28,10 @@ const STATE = {
   silverMetal: 'ag925',
   silverWeight: 250,
 
-  // Base spot prices
+  // Base spot prices in USD
   spotAuUsdPerGram: 88.36, // ~$2,748.50 / 31.1035g
   spotAgUsdPerGram: 1.02,
-  spotPtUsdPerGram: 32.15,
-  usdToRub: 96.65
+  spotPtUsdPerGram: 32.15
 };
 
 const PURITIES_TABLE = [
@@ -174,7 +80,7 @@ const PURITIES_TABLE = [
     karat: '21.6K / 22K',
     purity: 0.900,
     examples: {
-      es: 'Monedas de oro bullion (Centenario, Eagle, Soberano) y oro dental',
+      es: 'Monedas bullion (Centenario, Eagle, Soberano) y oro dental',
       en: 'Coin gold (Centenario, pre-1933 US gold, Sovereign), dental gold',
       ru: 'Инвестиционные и царские монеты (Червонец, Eagle), стоматологическое золото'
     }
@@ -231,7 +137,7 @@ const I18N = {
     ledger_3_title: 'Análisis espectral no destructivo',
     ledger_3_desc: 'Determinamos la composición exacta de la aleación mediante fluorescencia de rayos X sin rayar su pieza.',
     ledger_4_title: 'Liquidación en efectivo o transferencia',
-    ledger_4_desc: 'Pago en efectivo verificado con contador bancario, transferencia bancaria inmediata o criptoactivos (USDT).',
+    ledger_4_desc: 'Pago en efectivo verificado con contador bancario, transferencia wire inmediata o criptoactivos (USDT).',
     calc_kicker: '01 / CALCULADORA INTERACTIVA DE PAGO',
     calc_title: 'Cálculo de oferta vinculado al precio spot',
     calc_subtitle: 'Seleccione la pureza del oro, peso o modelo de reloj. Conozca su oferta neta y fije la cotización durante 3 horas mientras acude a nuestro despacho.',
@@ -319,7 +225,7 @@ const I18N = {
     spec_2_k2: 'Sin caja ni papeles',
     spec_2_v2: 'Aceptamos tras verificación en registros oficiales',
     spec_2_k3: 'Moneda de pago',
-    spec_2_v3: 'USD · EUR · RUB · USDT en el mismo día',
+    spec_2_v3: 'USD · EUR · USDT en el mismo día',
     card_3_title: 'Diamantes GIA desde 0.30 ct y joyería de firmas',
     card_3_desc: 'No tratamos piezas de Cartier, Van Cleef & Arpels, Bvlgari o Graff como simple oro para fundir. Diamantes certificados y sueltos valorados según el listado internacional Rapaport.',
     spec_3_k1: 'Equipo gemológico',
@@ -522,7 +428,7 @@ const I18N = {
     spec_2_k2: 'Without box & papers',
     spec_2_v2: 'Accepted upon verification in global lost databases',
     spec_2_k3: 'Payout currency',
-    spec_2_v3: 'USD · EUR · RUB · USDT on the same visit',
+    spec_2_v3: 'USD · EUR · USDT on the same visit',
     card_3_title: 'GIA diamonds from 0.30 ct & maison jewelry',
     card_3_desc: 'Unlike generic scrap shops, we never liquidate Cartier, Van Cleef & Arpels, Bvlgari, or Graff as scrap gold. Certified and loose diamonds evaluated according to the Rapaport list.',
     spec_3_k1: 'Gemological tools',
@@ -600,12 +506,12 @@ const I18N = {
   },
   ru: {
     page_title: 'Частный кабинет оценки · Золото, Серебро, Швейцарские часы',
-    spot_label: 'ФИКСИНГ LBMA / MOEX В РЕАЛЬНОМ ВРЕМЕНИ:',
+    spot_label: 'ФИКСИНГ LBMA / COMEX В РЕАЛЬНОМ ВРЕМЕНИ:',
     spot_au_name: 'AU 999.9 (Золото)',
     spot_ag_name: 'AG 999 (Серебро)',
     spot_pt_name: 'PT 950 (Платина)',
     spot_oz_name: '1 Тройская унция (31.1035 г)',
-    spot_updated_text: 'Котировки обновлены: текущий биржевой фиксинг',
+    spot_updated_text: 'Котировки обновлены: текущий биржевой фиксинг ($ USD)',
     brand_title: 'ЧАСТНЫЙ КАБИНЕТ ОЦЕНКИ',
     brand_subtitle: 'ЗОЛОТО · СЕРЕБРО · ЧАСЫ · ЗАЛОГ',
     header_cta: 'Рассчитать выплату',
@@ -616,31 +522,31 @@ const I18N = {
     nav_loans: 'Займы под залог',
     nav_protocol: 'Как проходит экспертиза',
     nav_contact: 'Оценка по фото и контакты',
-    hero_eyebrow: 'Центральный офис · Оценка в вашем присутствии · Расчет за 15 минут',
+    hero_eyebrow: 'Downtown Miami · Оценка в вашем присутствии · Расчет за 15 минут',
     hero_title: 'Выкуп золота, серебра и часов по курсу биржи.',
-    hero_lead: 'Принесите изделия на бесплатную неразрушающую экспертизу и получите точное предложение в день визита. Проверяем пробу спектрометром без запилов и кислоты, взвешиваем при вас и выплачиваем всю сумму сразу.',
-    hero_btn_primary: 'Рассчитать выплату',
+    hero_lead: 'Принесите изделия на бесплатную неразрушающую экспертизу и получите точное предложение в день визита. Проверяем пробу спектрометром без запилов и кислоты, взвешиваем при вас и выплачиваем всю сумму сразу в долларах США.',
+    hero_btn_primary: 'Рассчитать выплату ($)',
     hero_btn_whatsapp: 'Отправить фото в WhatsApp / TG',
     trust_1: 'Без предварительной записи',
     trust_2: 'Бесплатная экспертиза',
     trust_3: 'Без обязательства продавать',
-    hero_address: 'Пресненская наб., 12 · Пн–Сб, 10:00–20:00 · Отдельная переговорная',
+    hero_address: '174 E Flagler St, Miami · Пн–Сб, 9:00–20:00 · Отдельная переговорная',
     badge_no_acid: 'Без запилов и кислоты',
-    badge_cash_desk: 'Касса до 25 млн ₽ в день',
+    badge_cash_desk: 'Касса до $250,000 в день',
     photo_caption_title: 'Реальная оценка. Лично при вас.',
     photo_caption_sub: 'Поверенные весы I класса (0.01 г) · Привязка к живому фиксингу',
-    scale_pill_label: 'Золото 585° сегодня',
+    scale_pill_label: 'Золото 585° (14K) сегодня',
     ledger_1_title: 'до 97.5% от биржевого курса',
-    ledger_1_desc: 'Прозрачная формула расчета от фиксинга LBMA/MOEX без скрытых удержаний «на угар» и «за грязь».',
+    ledger_1_desc: 'Прозрачная формула расчета от фиксинга LBMA/COMEX без скрытых удержаний «на угар» и «за грязь».',
     ledger_2_title: '0.01 г точность взвешивания',
     ledger_2_desc: 'Лабораторные весы Ohaus с дублирующим дисплеем на стороне гостя и действующей поверкой.',
     ledger_3_title: '15 секунд спектральный анализ',
     ledger_3_desc: 'Определяем точный состав сплава рентгенофлуоресцентным методом без царапин и реактивов.',
     ledger_4_title: '10–15 мин выплата на месте',
-    ledger_4_desc: 'Наличные в закрытой кассовой комнате с детектором купюр, мгновенный перевод по реквизитам или USDT.',
+    ledger_4_desc: 'Наличные в USD в закрытой кассовой комнате с детектором купюр, мгновенный банковский перевод Wire или USDT.',
     calc_kicker: '01 / ОНЛАЙН-КАЛЬКУЛЯТОР ВЫПЛАТЫ',
-    calc_title: 'Предварительный расчет по биржевому курсу',
-    calc_subtitle: 'Выберите тип актива, пробу или модель часов. Калькулятор считает реальную выплату на руки и позволяет зафиксировать котировку на 3 часа на время дороги в офис.',
+    calc_title: 'Предварительный расчет по биржевому курсу ($)',
+    calc_subtitle: 'Выберите тип актива, пробу или модель часов. Калькулятор считает реальную выплату на руки в USD и позволяет зафиксировать котировку на 3 часа.',
     tab_gold_title: 'Золото и украшения',
     tab_gold_sub: '375° · 585° · 750° · 900° · 999.9°',
     tab_watches_title: 'Швейцарские часы',
@@ -682,7 +588,7 @@ const I18N = {
     lbl_silver_weight: '2. Вес партии (в граммах)',
     preset_set: '250 г (Набор)',
     preset_kilo: '1 000 г (1 кг)',
-    receipt_header: 'СПЕЦИФИКАЦИЯ РАСЧЕТА',
+    receipt_header: 'СПЕЦИФИКАЦИЯ РАСЧЕТА ($ USD)',
     receipt_live: 'Прямой курс биржи',
     rec_lbl_1: 'Актив и проба',
     rec_lbl_2: 'Категория оценки',
@@ -690,7 +596,7 @@ const I18N = {
     rec_lbl_4: 'Ставка выкупа за 1 г',
     rec_lbl_5: 'Удержания на грязь / угар',
     rec_no_deductions: '0% (Без вычетов)',
-    payout_label: 'СУММА ВЫПЛАТЫ НА РУКИ СЕГОДНЯ',
+    payout_label: 'СУММА ВЫПЛАТЫ НА РУКИ ($ USD)',
     payout_method: 'Наличными в кассе или переводом за 10 мин',
     loan_alt_title: 'Не хотите продавать изделие навсегда?',
     loan_alt_sub: 'Доступен займ под залог в сейфовом хранилище (0.28% в день)',
@@ -698,7 +604,7 @@ const I18N = {
     btn_send_calc: 'Отправить расчет себе в WhatsApp / TG',
     receipt_footnote: '* При фиксации котировки за вами закрепляется номер бронирования: даже если биржевой курс снизится пока вы едете в офис, мы выплатим зафиксированную сумму.',
     rates_kicker: '02 / КОТИРОВКИ КАБИНЕТА НА СЕГОДНЯ',
-    rates_title: 'Прайс-лист выкупа золота за 1 грамм',
+    rates_title: 'Прайс-лист выкупа золота за 1 грамм ($ USD)',
     rates_subtitle: 'Реальные цены скупки без звездочек. Нажмите на любую пробу, чтобы автоматически подставить ее в калькулятор.',
     th_purity: 'Проба / Карат',
     th_examples: 'Какие изделия относятся',
@@ -711,7 +617,7 @@ const I18N = {
     dirs_title: 'Четыре направления работы с активами',
     dirs_subtitle: 'Оцениваем не только вес чистого металла, но и часовую ликвидность, сертифицированные бриллианты и коллекционную ценность.',
     card_1_title: 'Ювелирное золото, лом, монеты и слитки',
-    card_1_desc: 'Принимаем современные и советские украшения (583, 585, 750 пробы), порванные цепи, непарные серьги, стоматологическое золото (850°), а также мерные слитки от 1 г до 1 кг и золотые монеты («Георгий Победоносец», «Сеятель», Krugerrand, Philharmonic).',
+    card_1_desc: 'Принимаем украшения 10K, 14K, 18K и 24K, порванные цепи, непарные серьги, стоматологическое золото, а также мерные слитки от 1 г до 1 кг и золотые монеты (American Eagle, Krugerrand, Philharmonic).',
     spec_1_k1: 'Метод проверки',
     spec_1_v1: 'Спектрометр Olympus Vanta (без запилов)',
     spec_1_k2: 'Слитки без сертификата',
@@ -719,15 +625,15 @@ const I18N = {
     spec_1_k3: 'Драгоценные камни в оправе',
     spec_1_v3: 'Оцениваем отдельно или аккуратно возвращаем',
     card_2_title: 'Швейцарские часы класса люкс',
-    card_2_desc: 'Выкупаем часы Rolex, Patek Philippe, Audemars Piguet, Vacheron Constantin, Breguet, A. Lange & Söhne, Richard Mille, Cartier и Omega. Проверка подлинности проводится часовым мастером на месте с сохранением заводской герметичности корпуса.',
+    card_2_desc: 'Выкупаем часы Rolex, Patek Philippe, Audemars Piguet, Vacheron Constantin, Breguet, Cartier и Omega. Проверка подлинности проводится часовым мастером на месте с сохранением заводской герметичности корпуса.',
     spec_2_k1: 'Ориентир оценки',
     spec_2_v1: 'Реальные сделки Chrono24 и дилерских бирж',
     spec_2_k2: 'Без коробки и документов',
     spec_2_v2: 'Принимаем после проверки по базам',
     spec_2_k3: 'Валюта расчета',
-    spec_2_v3: 'RUB · USD · EUR · USDT (в день визита)',
+    spec_2_v3: 'USD · EUR · USDT (в день визита)',
     card_3_title: 'Бриллианты от 0.30 ct и украшения Домов',
-    card_3_desc: 'В отличие от обычных скупок, мы не оцениваем кольца Cartier, Van Cleef & Arpels, Bvlgari, Graff и Tiffany & Co. по цене золотого лома. Крупные бриллианты с сертификатами GIA / МГУ и без них оцениваются геммологом по прайс-листу Rapaport.',
+    card_3_desc: 'В отличие от обычных скупок, мы не оцениваем кольца Cartier, Van Cleef & Arpels, Bvlgari, Graff и Tiffany & Co. по цене золотого лома. Крупные бриллианты с сертификатами GIA и без них оцениваются геммологом по прайс-листу Rapaport.',
     spec_3_k1: 'Оборудование геммолога',
     spec_3_v1: 'Yehuda Sherlock Holmes / Presidium',
     spec_3_k2: 'Премия за ювелирный Дом',
@@ -736,7 +642,7 @@ const I18N = {
     spec_3_v3: 'Бесплатная диагностика в присутствии гостя',
     card_4_title: 'Оборотные деньги под залог без продажи',
     card_4_desc: 'Если актив дорог как память или вы ждете дальнейшего роста золота — оформите краткосрочный займ за 15 минут. Изделие пломбируется в вашем присутствии и хранится в сертифицированном банковском сейфовом хранилище.',
-    spec_4_k1: 'Кредитная история и БКИ',
+    spec_4_k1: 'Кредитная история',
     spec_4_v1: 'Не проверяется и никуда не передается',
     spec_4_k2: 'Страхование хранения',
     spec_4_v2: '100% оценочной стоимости в полисе',
@@ -746,15 +652,15 @@ const I18N = {
     proto_title: 'Как проходит визит и почему у нас платят больше',
     proto_subtitle: 'Весь процесс занимает 10–15 минут в отдельной закрытой переговорной комнате без очереди и посторонних глаз.',
     step_1_title: 'Визит без записи или бронь курса онлайн',
-    step_1_text: 'Вы приезжаете в удобное время с паспортом. Гостей встречает охрана и провожает в индивидуальный кабинет оценки. Никаких общих окошек у входа.',
+    step_1_text: 'Вы приезжаете в удобное время с документом. Гостей встречает охрана и провожает в индивидуальный кабинет оценки.',
     step_2_title: 'Неразрушающий XRF-анализ и взвешивание',
     step_2_text: 'На ваших глазах эксперт проверяет изделие на спектрометре Olympus Vanta. Мы не делаем надпилов надфилем и не капаем кислоту. Табло весов повернуто к вам.',
     step_3_title: 'Открытая смета по биржевому фиксингу',
-    step_3_text: 'Вы получаете печатный лист оценки с указанием точного веса и цены каждого грамма. Если предложение вам не подходит — вы просто забираете вещи, экспертиза бесплатна.',
+    step_3_text: 'Вы получаете печатный лист оценки с указанием точного веса и цены каждого грамма в USD. Если предложение вам не подходит — вы просто забираете вещи, экспертиза бесплатна.',
     step_4_title: 'Мгновенная выплата в кассе',
-    step_4_text: 'При согласии оформляется официальный договор. Наличные проверяются на банковском сортировщике в вашем присутствии либо отправляются на ваш расчетный счет за 2 минуты.',
-    comp_title: 'Чем кабинет отличается от уличных ломбардов',
-    comp_sub: 'Наглядная разница на примере золотой цепи 585° весом 35 грамм',
+    step_4_text: 'При согласии оформляется официальный договор. Наличные USD проверяются на банковском сортировщике в вашем присутствии либо отправляются на ваш счет за 2 минуты.',
+    comp_title: 'Чем наш кабинет отличается от уличных ломбардов',
+    comp_sub: 'Наглядная разница на примере золотой цепи 14K (585) весом 35 грамм',
     comp_t1: '01 / ПРОВЕРКА ПРОБЫ МЕТАЛЛА',
     comp_bad_1_t: 'Обычная скупка:',
     comp_bad_1_d: 'глубокий запил надфилем на видном месте и проба азотной кислотой (портит украшение).',
@@ -772,9 +678,9 @@ const I18N = {
     comp_good_3_d: 'геммолог доплачивает за характеристики бриллиантов и сохранность брендовых изделий.',
     comp_t4: '04 / БЕЗОПАСНОСТЬ И ЛИМИТЫ КАССЫ',
     comp_bad_4_t: 'Обычная скупка:',
-    comp_bad_4_d: 'тесное окно с решеткой у проходной улицы, лимит кассы до 150–300 тыс. ₽.',
+    comp_bad_4_d: 'тесное окно с решеткой у проходной улицы, лимит кассы до $3,000.',
     comp_good_4_t: 'Наш кабинет:',
-    comp_good_4_d: 'закрытая переговорная, охраняемый паркинг и резерв кассы до 25 млн ₽ сразу.',
+    comp_good_4_d: 'закрытая переговорная, охраняемый паркинг и резерв кассы до $250,000 сразу.',
     contact_kicker: '05 / ДИСТАНЦИОННАЯ ОЦЕНКА И ВИЗИТ',
     contact_title: 'Узнайте точную сумму до выезда в офис',
     contact_subtitle: 'Пришлите фото клейма, весов или часов — дежурный эксперт рассчитает сумму выплаты за 5 минут и забронирует курс.',
@@ -786,39 +692,31 @@ const I18N = {
     upload_placeholder: '+ Прикрепить фото (JPG, HEIC, PNG) или перетащите сюда',
     upload_security: 'Данные защищены и удаляются сразу после оценки',
     btn_submit_form: 'Получить расчет и зафиксировать курс',
-    office_card_title: 'Приватный офис в центре города',
-    office_card_sub: 'Работаем без вывесок «Ломбард» на фасаде — полная конфиденциальность визита, отдельный вход через бизнес-центр и собственная охрана.',
+    office_card_title: 'Приватный офис в Downtown Miami',
+    office_card_sub: 'Полная конфиденциальность визита, отдельный вход через бизнес-центр и собственная охрана.',
     lbl_office_addr: 'АДРЕС КАБИНЕТА',
     lbl_office_hours: 'РЕЖИМ РАБОТЫ',
     lbl_office_phone: 'ПРЯМАЯ ЛИНИЯ ОЦЕНЩИКА',
-    contact_response_time: 'Отвечаем в WhatsApp и Telegram за 2–3 минуты',
+    contact_response_time: 'Отвечаем в WhatsApp за 2–3 минуты',
     footer_legal: 'AU 999.9 · PRIVATE ASSAY & BUYING DESK',
-    footer_disclaimer: 'Все расчеты на сайте носят информационный характер и привязаны к текущим биржевым котировкам драгоценных металлов. Для совершения сделки необходим паспорт.',
+    footer_disclaimer: 'Все расчеты на сайте носят информационный характер и привязаны к текущим биржевым котировкам драгоценных металлов ($ USD). Для совершения сделки необходим документ, удостоверяющий личность.',
     footer_copy: '© 2026. Private Bullion & Timepiece Vault. Все права защищены.',
     modal_kicker: 'ФИКСАЦИЯ КОТИРОВКИ НА 3 ЧАСА',
     modal_title: 'Закрепить расчет за вашим номером',
-    modal_desc: 'Параметры вашего расчета будут отправлены вам в СМС / WhatsApp вместе с пропуском на парковку.',
+    modal_desc: 'Параметры вашего расчета в USD будут отправлены вам в WhatsApp вместе с пропуском на парковку.',
     modal_badge: 'Бронь 3 часа',
     btn_get_code: 'Получить код бронирования курса →'
   }
 };
 
 // ==========================================
-// 3. CURRENCY FORMATTING
+// 2. CURRENCY FORMATTING (STRICTLY USD)
 // ==========================================
 function formatMoney(amountUsd) {
-  if (STATE.curr === 'usd') {
-    if (amountUsd >= 100) {
-      return '$' + Math.round(amountUsd).toLocaleString('en-US');
-    }
-    return '$' + amountUsd.toFixed(2);
-  } else {
-    const rub = amountUsd * STATE.usdToRub;
-    if (rub >= 100) {
-      return Math.round(rub).toLocaleString('ru-RU') + ' ₽';
-    }
-    return rub.toFixed(2) + ' ₽';
+  if (amountUsd >= 100) {
+    return '$' + Math.round(amountUsd).toLocaleString('en-US');
   }
+  return '$' + amountUsd.toFixed(2);
 }
 
 function getUnitSuffix() {
@@ -827,7 +725,7 @@ function getUnitSuffix() {
 }
 
 // ==========================================
-// 4. UI UPDATE & RENDER
+// 3. UI UPDATE & RENDER
 // ==========================================
 function updateUI() {
   const dict = I18N[STATE.lang] || I18N.es;
@@ -844,53 +742,38 @@ function updateUI() {
     }
   });
 
-  // Ticker prices
+  // Ticker prices in USD
   document.getElementById('ticker-au').textContent = formatMoney(STATE.spotAuUsdPerGram) + getUnitSuffix();
   document.getElementById('ticker-ag').textContent = formatMoney(STATE.spotAgUsdPerGram) + getUnitSuffix();
   document.getElementById('ticker-pt').textContent = formatMoney(STATE.spotPtUsdPerGram) + getUnitSuffix();
 
-  // 14K hero pill
+  // 14K hero pill in USD
   const payoutFactor = (100 - STATE.dealerMargin) / 100;
   const rate14k = STATE.spotAuUsdPerGram * 0.585 * payoutFactor;
   document.getElementById('hero-pill-585').textContent = formatMoney(rate14k) + getUnitSuffix();
 
-  // Address and contact details by language/currency context
+  // Address and contact details (Miami)
   const contactAddrEl = document.getElementById('contact-address-val');
   const contactHoursEl = document.getElementById('contact-hours-val');
   const contactPhoneEl = document.getElementById('contact-phone-val');
   const heroAddressEl = document.getElementById('hero-address-line');
   const badgeCashEl = document.getElementById('badge-cash-desk-text');
 
-  if (STATE.curr === 'rub') {
-    heroAddressEl.textContent = STATE.lang === 'ru'
-      ? 'Пресненская наб., 12 · Пн–Сб, 10:00–20:00 · Отдельная переговорная'
-      : (STATE.lang === 'en' ? 'Presnenskaya Emb. 12 · Mon–Sat, 10AM–8PM · Private VIP Suite' : 'Presnenskaya Emb. 12 · Lun–Sáb, 10:00–20:00 · Sala Privada');
-    contactAddrEl.textContent = STATE.lang === 'ru' ? 'Москва, Пресненская наб., 12 (Деловой центр)' : 'Presnenskaya Emb. 12, Moscow Financial District';
-    contactHoursEl.textContent = STATE.lang === 'ru' ? 'Понедельник – Суббота: 10:00 – 20:00' : 'Monday – Saturday: 10:00 AM – 8:00 PM';
-    contactPhoneEl.textContent = '+7 (495) 128-99-99';
-    if (badgeCashEl) badgeCashEl.textContent = STATE.lang === 'ru' ? 'Касса до 25 млн ₽ в день' : (STATE.lang === 'en' ? 'Cash reserves up to 25M ₽' : 'Fondo de caja hasta 25M ₽');
-  } else {
-    heroAddressEl.textContent = STATE.lang === 'es'
-      ? '174 E Flagler St, Miami · Lun–Sáb, 9:00–20:00 · Sala de Seguridad Privada'
-      : (STATE.lang === 'en' ? '174 E Flagler St, Miami · Mon–Sat, 9AM–8PM · Private Security Desk' : '174 E Flagler St, Майами · Пн–Сб, 9:00–20:00 · Приватный офис');
-    contactAddrEl.textContent = '174 E Flagler St, Downtown Miami, FL 33131';
-    contactHoursEl.textContent = STATE.lang === 'es'
-      ? 'Lunes a Sábado: 9:00 AM – 8:00 PM'
-      : (STATE.lang === 'en' ? 'Monday – Saturday: 9:00 AM – 8:00 PM' : 'Понедельник – Суббота: 9:00 – 20:00');
-    contactPhoneEl.textContent = '+1 (305) 555-0194';
-    if (badgeCashEl) badgeCashEl.textContent = STATE.lang === 'es'
-      ? 'Fondo de caja hasta $250,000'
-      : (STATE.lang === 'en' ? 'Cash desk up to $250,000 on site' : 'Касса до $250,000 в день');
-  }
+  heroAddressEl.textContent = STATE.lang === 'es'
+    ? '174 E Flagler St, Miami · Lun–Sáb, 9:00–20:00 · Sala de Seguridad Privada'
+    : (STATE.lang === 'en' ? '174 E Flagler St, Miami · Mon–Sat, 9AM–8PM · Private Security Desk' : '174 E Flagler St, Майами · Пн–Сб, 9:00–20:00 · Приватный офис');
+  contactAddrEl.textContent = '174 E Flagler St, Downtown Miami, FL 33131';
+  contactHoursEl.textContent = STATE.lang === 'es'
+    ? 'Lunes a Sábado: 9:00 AM – 8:00 PM'
+    : (STATE.lang === 'en' ? 'Monday – Saturday: 9:00 AM – 8:00 PM' : 'Понедельник – Суббота: 9:00 – 20:00');
+  contactPhoneEl.textContent = '+1 (305) 555-0194';
+  if (badgeCashEl) badgeCashEl.textContent = STATE.lang === 'es'
+    ? 'Fondo de caja hasta $250,000'
+    : (STATE.lang === 'en' ? 'Cash desk up to $250,000 on site' : 'Касса до $250,000 в день');
 
   // Active classes on language switchers
   document.querySelectorAll('.lang-switch .switch-btn').forEach((b) => {
     b.classList.toggle('active', b.getAttribute('data-lang') === STATE.lang);
-  });
-
-  // Active classes on currency switchers
-  document.querySelectorAll('.currency-switch .switch-btn').forEach((b) => {
-    b.classList.toggle('active', b.getAttribute('data-curr') === STATE.curr);
   });
 
   renderRatesTable();
@@ -977,7 +860,6 @@ function recalculateOffer() {
 
     recVal1.textContent = (STATE.lang === 'ru' ? 'Золото ' : (STATE.lang === 'en' ? 'Gold ' : 'Oro ')) + STATE.goldPurityLabel;
 
-    // Category label
     let catName = dict.cat_jewelry;
     if (STATE.goldCategoryId === 'scrap') catName = dict.cat_scrap;
     if (STATE.goldCategoryId === 'bullion') catName = dict.cat_bullion;
@@ -1009,14 +891,12 @@ function recalculateOffer() {
 
     recVal1.textContent = STATE.watchName.split('(')[0].trim();
 
-    // Set label
     let setLabel = dict.watch_set_full;
     if (STATE.watchSetId === 'papers') setLabel = dict.watch_set_papers;
     if (STATE.watchSetId === 'box') setLabel = dict.watch_set_box;
     if (STATE.watchSetId === 'watch') setLabel = dict.watch_set_only;
     recVal2.textContent = setLabel;
 
-    // Condition label
     let condLabel = dict.watch_cond_excellent;
     if (STATE.watchCondId === 'unworn') condLabel = dict.watch_cond_unworn;
     if (STATE.watchCondId === 'good') condLabel = dict.watch_cond_good;
@@ -1067,7 +947,7 @@ function recalculateOffer() {
 }
 
 // ==========================================
-// 5. EVENT BINDINGS
+// 4. EVENT BINDINGS
 // ==========================================
 function switchCalcTab(tabName) {
   STATE.calcTab = tabName;
@@ -1216,17 +1096,6 @@ document.addEventListener('DOMContentLoaded', () => {
     updateUI();
   });
 
-  // Currency buttons
-  document.getElementById('btn-curr-usd').addEventListener('click', () => {
-    STATE.curr = 'usd';
-    updateUI();
-  });
-
-  document.getElementById('btn-curr-rub').addEventListener('click', () => {
-    STATE.curr = 'rub';
-    updateUI();
-  });
-
   // Modal
   const modal = document.getElementById('offer-modal');
   const openModalBtns = [
@@ -1287,6 +1156,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('form-success-banner').style.display = 'block';
   });
 
-  // Initial render
+  // Initial render (Spanish default)
   updateUI();
 });

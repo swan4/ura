@@ -56,124 +56,32 @@ body {
 }
 
 /* ==========================================
-   IER BACKGROUND ANIMATION LAYER
+   ULTRA-LIGHTWEIGHT STATIC LUXURY BACKGROUND (0% CPU / FAST LOAD)
    ========================================== */
-.ier-bg {
+.vault-bg {
   position: fixed;
   inset: 0;
-  overflow: hidden;
   pointer-events: none;
   z-index: 0;
-  background: radial-gradient(120% 90% at 50% 0%, #1d1b17 0%, #100f0d 50%, #090908 100%);
+  background: 
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(216, 180, 103, 0.12) 0%, transparent 60%),
+    radial-gradient(circle 600px at 85% 90%, rgba(168, 121, 42, 0.08) 0%, transparent 70%),
+    radial-gradient(circle 500px at 15% 50%, rgba(216, 180, 103, 0.05) 0%, transparent 70%),
+    linear-gradient(180deg, #131210 0%, #0b0b0a 40%, #060605 100%);
 }
-.ier-bg * {
-  box-sizing: border-box;
-}
-.ier-bg canvas {
+
+.vault-bg::after {
+  content: '';
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 3;
-}
-.ier-bg__blob {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0;
-  z-index: 1;
-  animation: ier-in 3s ease forwards, ier-drift 24s ease-in-out infinite alternate;
-}
-.ier-bg__blob--1 {
-  width: 48vmax;
-  height: 48vmax;
-  left: 50%;
-  top: -22vmax;
-  margin-left: -24vmax;
-  background: radial-gradient(closest-side, rgba(217, 180, 90, 0.2), transparent);
-}
-.ier-bg__blob--2 {
-  width: 36vmax;
-  height: 36vmax;
-  right: -10vmax;
-  bottom: -16vmax;
-  background: radial-gradient(closest-side, rgba(168, 121, 42, 0.18), transparent);
-  animation-delay: 0.6s, -8s;
-}
-.ier-bg__blob--3 {
-  width: 36vmax;
-  height: 36vmax;
-  left: -10vmax;
-  bottom: -12vmax;
-  background: radial-gradient(closest-side, rgba(168, 121, 42, 0.15), transparent);
-  animation-delay: 1.2s, -15s;
-}
-@keyframes ier-in {
-  to { opacity: 1; }
-}
-@keyframes ier-drift {
-  0% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(-3vmax, 2vmax) scale(1.08); }
-  100% { transform: translate(3vmax, -2vmax) scale(0.95); }
-}
-.ier-bg__beam {
-  position: absolute;
-  top: -8%;
-  width: 30vmax;
-  height: 120%;
-  z-index: 2;
-  transform-origin: 50% 0;
-  mix-blend-mode: screen;
-  background: linear-gradient(180deg, rgba(255, 236, 196, 0.15) 0%, rgba(255, 225, 170, 0.05) 45%, transparent 80%);
-  clip-path: polygon(46% 0, 54% 0, 100% 100%, 0 100%);
-  opacity: 0;
-  animation: ier-flick 1.8s ease forwards, ier-sway 15s ease-in-out infinite alternate;
-}
-.ier-bg__beam--1 { left: 8%; animation-delay: 0.3s, -2s; }
-.ier-bg__beam--2 { left: 50%; margin-left: -15vmax; animation-delay: 0.7s, -7s; }
-.ier-bg__beam--3 { right: 8%; animation-delay: 1.1s, -11s; }
-@keyframes ier-flick {
-  0% { opacity: 0; }
-  12% { opacity: 0.8; }
-  18% { opacity: 0.15; }
-  28% { opacity: 0.9; }
-  36% { opacity: 0.35; }
-  50%, 100% { opacity: 1; }
-}
-@keyframes ier-sway {
-  0% { transform: rotate(-6deg); }
-  100% { transform: rotate(6deg); }
-}
-.ier-bg__lines {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  opacity: 0.5;
-  background: repeating-linear-gradient(115deg, transparent 0 140px, rgba(217, 180, 90, 0.035) 140px 141px);
-  -webkit-mask-image: radial-gradient(70% 70% at 50% 40%, #000, transparent);
-          mask-image: radial-gradient(70% 70% at 50% 40%, #000, transparent);
-}
-.ier-bg__sheen {
-  position: absolute;
-  inset: -30%;
-  z-index: 4;
-  background: linear-gradient(115deg, transparent 45%, rgba(255, 236, 190, 0.05) 50%, transparent 55%);
-  transform: translateX(-60%);
-  animation: ier-sweep 11s 3s ease-in-out infinite;
-}
-@keyframes ier-sweep {
-  0% { transform: translateX(-60%); }
-  30%, 100% { transform: translateX(60%); }
-}
-.ier-bg__vignette {
-  position: absolute;
-  inset: 0;
-  z-index: 5;
-  background: radial-gradient(120% 100% at 50% 40%, transparent 55%, rgba(5, 5, 4, 0.75) 100%);
-}
-@media (prefers-reduced-motion: reduce) {
-  .ier-bg * { animation: none !important; opacity: 1 !important; }
-  .ier-bg__sheen { display: none; }
+  opacity: 0.22;
+  background-image: repeating-linear-gradient(
+    115deg,
+    transparent 0 120px,
+    rgba(216, 180, 103, 0.035) 120px 121px
+  );
+  mask-image: radial-gradient(70% 70% at 50% 30%, #000, transparent);
+  -webkit-mask-image: radial-gradient(70% 70% at 50% 30%, #000, transparent);
 }
 
 .page-content {
@@ -1709,7 +1617,7 @@ button {
 }
 
 /* ==========================================
-   RESPONSIVE BREAKPOINTS
+   RESPONSIVE BREAKPOINTS (POLISHED MOBILE UX)
    ========================================== */
 @media (max-width: 1024px) {
   .hero-grid,
@@ -1738,15 +1646,193 @@ button {
   }
 }
 
-@media (max-width: 720px) {
+@media (max-width: 768px) {
   .container {
-    padding: 0 18px;
+    padding: 0 16px;
   }
 
+  /* Compact mobile header */
+  .header-top {
+    padding: 10px 0;
+    gap: 12px;
+  }
+
+  .brand-mark {
+    gap: 10px;
+  }
+
+  .hallmark-stamp {
+    width: 36px;
+    height: 36px;
+    font-size: 10px;
+  }
+
+  .brand-title {
+    font-size: 12px;
+    letter-spacing: 0.08em;
+  }
+
+  .brand-subtitle {
+    font-size: 9px;
+    letter-spacing: 0.1em;
+  }
+
+  .header-actions {
+    gap: 8px;
+  }
+
+  .lang-switch .switch-btn {
+    padding: 4px 6px;
+    font-size: 11px;
+  }
+
+  .header-cta-btn {
+    padding: 8px 14px;
+    font-size: 12px;
+  }
+
+  .header-nav {
+    padding: 10px 0;
+    gap: 16px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .nav-link {
+    font-size: 13px;
+  }
+
+  /* Hero Mobile */
   .hero-section {
-    padding: 36px 0 48px;
+    padding: 24px 0 36px;
   }
 
+  .hero-eyebrow {
+    font-size: 12px;
+    margin-bottom: 12px;
+  }
+
+  .hero-title {
+    font-size: clamp(26px, 7.8vw, 38px);
+    line-height: 1.1;
+    margin-bottom: 16px;
+    letter-spacing: -0.025em;
+  }
+
+  .hero-lead {
+    font-size: 15px;
+    line-height: 1.5;
+    margin-bottom: 22px;
+  }
+
+  .hero-cta-row {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .hero-cta-row .btn-gold,
+  .hero-cta-row .btn-outline-gold {
+    width: 100%;
+    padding: 14px;
+    font-size: 15px;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .hero-trust-row {
+    gap: 8px 14px;
+    font-size: 12.5px;
+    margin-bottom: 20px;
+  }
+
+  .hero-location-link {
+    font-size: 12.5px;
+  }
+
+  .hero-visual-card {
+    aspect-ratio: auto;
+    height: 360px;
+    margin-top: 8px;
+  }
+
+  .hero-visual-top {
+    padding: 12px 14px;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .assay-badge {
+    padding: 5px 8px;
+    font-size: 10px;
+  }
+
+  .hero-visual-bottom {
+    padding: 18px 16px;
+  }
+
+  .hero-visual-caption h3 {
+    font-size: 18px;
+  }
+
+  .hero-visual-caption p {
+    font-size: 12px;
+  }
+
+  .hero-live-scale-pill {
+    padding: 6px 10px;
+  }
+
+  .scale-pill-label {
+    font-size: 9px;
+  }
+
+  .scale-pill-value {
+    font-size: 13px;
+  }
+
+  /* Guarantees */
+  .ledger-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .ledger-cell {
+    padding: 18px 14px;
+  }
+
+  .ledger-num {
+    font-size: 19px;
+    margin-bottom: 4px;
+  }
+
+  .ledger-title {
+    font-size: 13px;
+  }
+
+  .ledger-desc {
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  /* Sections */
+  .section {
+    padding: 48px 0;
+  }
+
+  .section-header {
+    margin-bottom: 28px;
+    gap: 12px;
+  }
+
+  .section-title {
+    font-size: clamp(24px, 6.5vw, 32px);
+  }
+
+  .section-subtitle {
+    font-size: 14px;
+  }
+
+  /* Calculator Mobile */
   .calc-tabs {
     grid-template-columns: 1fr;
   }
@@ -1754,28 +1840,187 @@ button {
   .calc-tab {
     border-right: none;
     border-bottom: 1px solid var(--border-subtle);
+    padding: 12px 16px;
+  }
+
+  .calc-tab-title {
+    font-size: 14px;
+  }
+
+  .calc-tab-sub {
+    font-size: 11px;
+  }
+
+  .calc-controls {
+    padding: 20px 16px;
   }
 
   .karat-grid {
     grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+
+  .karat-btn {
+    padding: 10px 4px;
+  }
+
+  .karat-main {
+    font-size: 14px;
+  }
+
+  .karat-sub {
+    font-size: 10px;
   }
 
   .category-pills,
-  .watch-select-grid,
-  .categories-grid,
-  .form-row-2,
-  .comp-vs-grid,
-  .ledger-grid {
+  .watch-select-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .cat-pill {
+    padding: 11px 14px;
+  }
+
+  .weight-box {
+    padding: 14px 12px;
+  }
+
+  .weight-number-input {
+    font-size: 26px;
+    width: 100px;
+  }
+
+  .weight-presets {
+    gap: 4px;
+  }
+
+  .preset-chip {
+    padding: 5px 8px;
+    font-size: 11px;
+  }
+
+  .calc-receipt {
+    padding: 22px 16px;
+  }
+
+  .receipt-payout-box {
+    padding: 18px 16px;
+  }
+
+  .payout-amount {
+    font-size: clamp(26px, 7vw, 36px);
+  }
+
+  .loan-alternative-box {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  /* Rates Table Mobile */
+  .rates-table-wrap {
+    -webkit-overflow-scrolling: touch;
+    border-radius: var(--radius-sm);
+  }
+
+  .rates-table th,
+  .rates-table td {
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+
+  /* Categories & Specs Mobile */
+  .categories-grid {
     grid-template-columns: 1fr;
   }
 
   .category-card {
+    padding: 24px 18px;
     border-right: none !important;
     border-bottom: 1px solid var(--border-subtle) !important;
   }
 
-  .ledger-cell {
-    border-right: none !important;
+  .cat-title {
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+
+  .cat-desc {
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+
+  /* Protocol & Comparison Mobile */
+  .step-row {
+    padding: 18px 16px;
+    grid-template-columns: 38px 1fr;
+    gap: 12px;
+  }
+
+  .step-num {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+
+  .step-title {
+    font-size: 15px;
+  }
+
+  .step-text {
+    font-size: 13px;
+  }
+
+  .comparison-card {
+    padding: 20px 16px;
+  }
+
+  .comp-title {
+    font-size: 18px;
+  }
+
+  .comp-vs-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  /* Forms & Inputs: 16px prevents iOS auto-zoom */
+  .form-row-2 {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .appraisal-form-card,
+  .office-info-card {
+    padding: 22px 16px;
+  }
+
+  .text-input,
+  .textarea-input,
+  .custom-select {
+    font-size: 16px !important;
+    padding: 12px 14px;
+  }
+
+  .footer-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ledger-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ledger-cell:nth-child(1) {
     border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .header-cta-btn {
+    padding: 7px 11px;
+    font-size: 11px;
   }
 }

@@ -11,19 +11,8 @@
 </head>
 <body>
 
-  <!-- IER ANIMATED BACKGROUND LAYER -->
-  <div class="ier-bg" aria-hidden="true">
-    <div class="ier-bg__blob ier-bg__blob--1"></div>
-    <div class="ier-bg__blob ier-bg__blob--2"></div>
-    <div class="ier-bg__blob ier-bg__blob--3"></div>
-    <div class="ier-bg__lines"></div>
-    <div class="ier-bg__beam ier-bg__beam--1"></div>
-    <div class="ier-bg__beam ier-bg__beam--2"></div>
-    <div class="ier-bg__beam ier-bg__beam--3"></div>
-    <canvas></canvas>
-    <div class="ier-bg__sheen"></div>
-    <div class="ier-bg__vignette"></div>
-  </div>
+  <!-- ULTRA-LIGHTWEIGHT STATIC LUXURY BACKGROUND (0% CPU / NO LAG) -->
+  <div class="vault-bg" aria-hidden="true"></div>
 
   <div class="page-content">
   <!-- TOP LIVE SPOT TICKER BAR -->
@@ -75,18 +64,13 @@
         </a>
 
         <div class="header-actions">
-          <div class="currency-switch" aria-label="Moneda de cotización">
-            <button type="button" class="switch-btn active" data-curr="usd" id="btn-curr-usd">$ USD</button>
-            <button type="button" class="switch-btn" data-curr="rub" id="btn-curr-rub">₽ RUB</button>
-          </div>
-
           <div class="lang-switch" aria-label="Idioma">
             <button type="button" class="switch-btn active" data-lang="es" id="btn-lang-es">ES</button>
             <button type="button" class="switch-btn" data-lang="en" id="btn-lang-en">EN</button>
             <button type="button" class="switch-btn" data-lang="ru" id="btn-lang-ru">RU</button>
           </div>
 
-          <a href="#calculator-section" class="btn-gold" data-i18n="header_cta">Oferta en Efectivo</a>
+          <a href="#calculator-section" class="btn-gold header-cta-btn" data-i18n="header_cta">Oferta en Efectivo</a>
         </div>
       </div>
     </div>
