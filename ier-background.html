@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IER Gold Background</title>
+<style>
+html,body{margin:0;height:100%;background:#090908;overflow:hidden}
+
+.ier-bg{position:fixed;inset:0;overflow:hidden;pointer-events:none;
+  background:radial-gradient(120% 90% at 50% 0%,#1d1b17 0%,#100f0d 50%,#090908 100%)}
+.ier-bg *{box-sizing:border-box}
+.ier-bg canvas{position:absolute;inset:0;width:100%;height:100%;z-index:3}
+
+/* soft gold glows */
+.ier-bg__blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:0;z-index:1;
+  animation:ier-in 3s ease forwards, ier-drift 24s ease-in-out infinite alternate}
+.ier-bg__blob--1{width:48vmax;height:48vmax;left:50%;top:-22vmax;margin-left:-24vmax;
+  background:radial-gradient(closest-side,rgba(217,180,90,.20),transparent)}
+.ier-bg__blob--2{width:36vmax;height:36vmax;right:-10vmax;bottom:-16vmax;
+  background:radial-gradient(closest-side,rgba(168,121,42,.18),transparent);animation-delay:.6s,-8s}
+.ier-bg__blob--3{width:36vmax;height:36vmax;left:-10vmax;bottom:-12vmax;
+  background:radial-gradient(closest-side,rgba(168,121,42,.15),transparent);animation-delay:1.2s,-15s}
+@keyframes ier-in{to{opacity:1}}
+@keyframes ier-drift{0%{transform:translate(0,0) scale(1)}50%{transform:translate(-3vmax,2vmax) scale(1.08)}100%{transform:translate(3vmax,-2vmax) scale(.95)}}
+
+/* swaying spotlights */
+.ier-bg__beam{position:absolute;top:-8%;width:30vmax;height:120%;z-index:2;transform-origin:50% 0;mix-blend-mode:screen;
+  background:linear-gradient(180deg,rgba(255,236,196,.15) 0%,rgba(255,225,170,.05) 45%,transparent 80%);
+  clip-path:polygon(46% 0,54% 0,100% 100%,0 100%);opacity:0;
+  animation:ier-flick 1.8s ease forwards, ier-sway 15s ease-in-out infinite alternate}
+.ier-bg__beam--1{left:8%;animation-delay:.3s,-2s}
+.ier-bg__beam--2{left:50%;margin-left:-15vmax;animation-delay:.7s,-7s}
+.ier-bg__beam--3{right:8%;animation-delay:1.1s,-11s}
+@keyframes ier-flick{0%{opacity:0}12%{opacity:.8}18%{opacity:.15}28%{opacity:.9}36%{opacity:.35}50%,100%{opacity:1}}
+@keyframes ier-sway{0%{transform:rotate(-6deg)}100%{transform:rotate(6deg)}}
+
+/* fine gold lines */
+.ier-bg__lines{position:absolute;inset:0;z-index:2;opacity:.5;
+  background:repeating-linear-gradient(115deg,transparent 0 140px,rgba(217,180,90,.035) 140px 141px);
+  -webkit-mask-image:radial-gradient(70% 70% at 50% 40%,#000,transparent);
+          mask-image:radial-gradient(70% 70% at 50% 40%,#000,transparent)}
+
+/* diagonal sheen */
+.ier-bg__sheen{position:absolute;inset:-30%;z-index:4;
+  background:linear-gradient(115deg,transparent 45%,rgba(255,236,190,.05) 50%,transparent 55%);
+  transform:translateX(-60%);animation:ier-sweep 11s 3s ease-in-out infinite}
+@keyframes ier-sweep{0%{transform:translateX(-60%)}30%,100%{transform:translateX(60%)}}
+
+/* soft vignette */
+.ier-bg__vignette{position:absolute;inset:0;z-index:5;
+  background:radial-gradient(120% 100% at 50% 40%,transparent 55%,rgba(5,5,4,.75) 100%)}
+
+@media (prefers-reduced-motion:reduce){
+  .ier-bg *{animation:none!important;opacity:1!important}
+  .ier-bg__sheen{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="ier-bg" aria-hidden="true">
+  <div class="ier-bg__blob ier-bg__blob--1"></div>
+  <div class="ier-bg__blob ier-bg__blob--2"></div>
+  <div class="ier-bg__blob ier-bg__blob--3"></div>
+  <div class="ier-bg__lines"></div>
+  <div class="ier-bg__beam ier-bg__beam--1"></div>
+  <div class="ier-bg__beam ier-bg__beam--2"></div>
+  <div class="ier-bg__beam ier-bg__beam--3"></div>
+  <canvas></canvas>
+  <div class="ier-bg__sheen"></div>
+  <div class="ier-bg__vignette"></div>
+</div>
+
+<script>
+(function(){
+  var root = document.querySelector('.ier-bg');
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var cv = root.querySelector('canvas'), ctx = cv.getContext('2d');
+  var W, H, dpr = Math.min(devicePixelRatio || 1, 2), parts = [], running = false, raf, last = 0;
+
+  function spawn(initial){
+    return { x: Math.random()*W, y: initial ? Math.random()*H : H + 10,
+      r: .4 + Math.random()*1.7, vy: -(.1 + Math.random()*.4), vx: (Math.random()-.5)*.15,
+      t: Math.random()*6.28, ts: .008 + Math.random()*.025, a: .35 + Math.random()*.65 };
+  }
+  function init(){
+    var r = root.getBoundingClientRect(); W = r.width; H = r.height;
+    cv.width = W*dpr; cv.height = H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+    var n = Math.min(280, Math.round(W*H/5000)); parts = [];
+    for (var i=0;i<n;i++) parts.push(spawn(true));
+    if (reduce) draw(0);
+  }
+  function draw(k){
+    ctx.clearRect(0,0,W,H);
+    for (var i=0;i<parts.length;i++){
+      var p = parts[i];
+      p.x += p.vx*k; p.y += p.vy*k; p.t += p.ts*k;
+      if (p.y < -10) { parts[i] = spawn(false); continue; }
+      var a = p.a * (.3 + .7*Math.abs(Math.sin(p.t))) * Math.min(1, p.y/(H*.2));
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,6.283);
+      ctx.fillStyle = 'rgba(240,210,140,'+(a*.8).toFixed(3)+')';
+      ctx.shadowColor = 'rgba(255,215,140,.9)'; ctx.shadowBlur = p.r*5;
+      ctx.fill();
+    }
+  }
+  function frame(ts){
+    var k = last ? Math.min(3,(ts-last)/16.7) : 1; last = ts;
+    draw(k); raf = requestAnimationFrame(frame);
+  }
+  function start(){ if(!running && !reduce){ running = true; last = 0; raf = requestAnimationFrame(frame); } }
+  function stop(){ running = false; cancelAnimationFrame(raf); }
+
+  init();
+  new ResizeObserver(init).observe(root);
+  document.addEventListener('visibilitychange', function(){ document.hidden ? stop() : start(); });
+  start();
+})();
+</script>
+</body>
+</html>

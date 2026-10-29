@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-i18n="page_title">Oficina Privada de Tasación · Oro, Plata y Relojes Suizos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+
+  <!-- IER ANIMATED BACKGROUND LAYER -->
+  <div class="ier-bg" aria-hidden="true">
+    <div class="ier-bg__blob ier-bg__blob--1"></div>
+    <div class="ier-bg__blob ier-bg__blob--2"></div>
+    <div class="ier-bg__blob ier-bg__blob--3"></div>
+    <div class="ier-bg__lines"></div>
+    <div class="ier-bg__beam ier-bg__beam--1"></div>
+    <div class="ier-bg__beam ier-bg__beam--2"></div>
+    <div class="ier-bg__beam ier-bg__beam--3"></div>
+    <canvas></canvas>
+    <div class="ier-bg__sheen"></div>
+    <div class="ier-bg__vignette"></div>
+  </div>
+
+  <div class="page-content">
+  <!-- TOP LIVE SPOT TICKER BAR -->
+  <div class="spot-strip">
+    <div class="container spot-strip-inner">
+      <div class="spot-tickers">
+        <div class="spot-item">
+          <span class="spot-dot"></span>
+          <span class="spot-symbol" data-i18n="spot_label">FIJACIÓN LBMA / COMEX:</span>
+        </div>
+        <div class="spot-item">
+          <span class="spot-symbol" data-i18n="spot_au_name">AU 999.9 (Oro)</span>
+          <span class="spot-price" id="ticker-au">$88.36/g</span>
+          <span class="spot-delta">+0.64% ▲</span>
+        </div>
+        <div class="spot-item">
+          <span class="spot-symbol" data-i18n="spot_ag_name">AG 999 (Plata)</span>
+          <span class="spot-price" id="ticker-ag">$1.02/g</span>
+          <span class="spot-delta">+1.12% ▲</span>
+        </div>
+        <div class="spot-item">
+          <span class="spot-symbol" data-i18n="spot_pt_name">PT 950 (Platino)</span>
+          <span class="spot-price" id="ticker-pt">$32.15/g</span>
+          <span class="spot-delta">+0.28% ▲</span>
+        </div>
+        <div class="spot-item">
+          <span class="spot-symbol" data-i18n="spot_oz_name">1 Onza Troy (31.1035 g)</span>
+          <span class="spot-price" id="ticker-oz">$2,748.50</span>
+        </div>
+      </div>
+      <div class="spot-meta">
+        <span class="spot-source" id="spot-updated-time" data-i18n="spot_updated_text">Cotizaciones en tiempo real · Fixing internacional</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SITE HEADER (INSPIRED BY IRON EAGLE RESERVE LAYOUT, UNBRANDED LUXURY) -->
+  <header class="site-header">
+    <div class="container">
+      <div class="header-top">
+        <a href="#" class="brand-mark">
+          <div class="hallmark-stamp" title="Contrastes de ensayo AU 999.9">
+            AU<br>999
+          </div>
+          <div class="brand-text-wrap">
+            <span class="brand-title" id="editable-brand-title" data-i18n="brand_title">MESA PRIVADA DE TASACIÓN</span>
+            <span class="brand-subtitle" id="editable-brand-sub" data-i18n="brand_subtitle">ORO · PLATA · RELOJES SUIZOS · PRÉSTAMOS</span>
+          </div>
+        </a>
+
+        <div class="header-actions">
+          <div class="currency-switch" aria-label="Moneda de cotización">
+            <button type="button" class="switch-btn active" data-curr="usd" id="btn-curr-usd">$ USD</button>
+            <button type="button" class="switch-btn" data-curr="rub" id="btn-curr-rub">₽ RUB</button>
+          </div>
+
+          <div class="lang-switch" aria-label="Idioma">
+            <button type="button" class="switch-btn active" data-lang="es" id="btn-lang-es">ES</button>
+            <button type="button" class="switch-btn" data-lang="en" id="btn-lang-en">EN</button>
+            <button type="button" class="switch-btn" data-lang="ru" id="btn-lang-ru">RU</button>
+          </div>
+
+          <a href="#calculator-section" class="btn-gold" data-i18n="header_cta">Oferta en Efectivo</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="header-nav-bar">
+      <div class="container">
+        <nav class="header-nav">
+          <a href="#calculator-section" class="nav-link" data-i18n="nav_calc">Calculadora en Vivo</a>
+          <a href="#rates-section" class="nav-link" data-i18n="nav_gold">Precios por Gramo</a>
+          <a href="#categories-section" class="nav-link" data-i18n="nav_watches">Relojes Suizos</a>
+          <a href="#categories-section" class="nav-link" data-i18n="nav_silver">Plata y Lingotes</a>
+          <a href="#categories-section" class="nav-link" data-i18n="nav_loans">Préstamos Prendarios</a>
+          <a href="#protocol-section" class="nav-link" data-i18n="nav_protocol">Protocolo de Ensayo</a>
+          <a href="#contact-section" class="nav-link" data-i18n="nav_contact">Tasación por Foto y Despacho</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="hero-grid">
+        <!-- Left Column -->
+        <div class="hero-copy">
+          <div class="hero-eyebrow" id="hero-eyebrow" data-i18n="hero_eyebrow">
+            Downtown Miami · Evaluación Inmediata · Pago el Mismo Día
+          </div>
+
+          <h1 class="hero-title" data-i18n="hero_title">
+            Venda oro, plata y relojes suizos al precio spot del mercado.
+          </h1>
+
+          <p class="hero-lead" data-i18n="hero_lead">
+            Traiga sus piezas para una tasación gratuita no destructiva por espectrometría XRF y una oferta clara en efectivo. Sin ácidos ni raspaduras, pesaje transparente frente a usted y pago inmediato durante su visita.
+          </p>
+
+          <div class="hero-cta-row">
+            <a href="#calculator-section" class="btn-gold">
+              <span data-i18n="hero_btn_primary">Calcular oferta en efectivo</span>
+              <span>→</span>
+            </a>
+            <button type="button" class="btn-outline-gold" id="open-photo-modal-btn">
+              <span>💬</span>
+              <span data-i18n="hero_btn_whatsapp">Enviar fotos por WhatsApp</span>
+            </button>
+          </div>
+
+          <div class="hero-trust-row">
+            <div class="trust-item">
+              <span class="trust-check">✓</span>
+              <span data-i18n="trust_1">Sin cita previa (Walk-ins bienvenidos)</span>
+            </div>
+            <div class="trust-item">
+              <span class="trust-check">✓</span>
+              <span data-i18n="trust_2">Tasación XRF gratuita</span>
+            </div>
+            <div class="trust-item">
+              <span class="trust-check">✓</span>
+              <span data-i18n="trust_3">Sin obligación de venta</span>
+            </div>
+          </div>
+
+          <a href="#contact-section" class="hero-location-link">
+            <span>📍</span>
+            <span class="hero-location-text" id="hero-address-line" data-i18n="hero_address">
+              174 E Flagler St, Miami · Lun–Sáb, 9:00–20:00 · Sala de Seguridad Privada
+            </span>
+            <span>→</span>
+          </a>
+        </div>
+
+        <!-- Right Column: Studio Desk Photograph -->
+        <div class="hero-visual-card">
+          <img
+            src="./hero-desk.jpg"
+            alt="Mesa de ensayo de metales preciosos y alta relojería"
+            class="hero-visual-img"
+          />
+          <div class="hero-visual-overlay"></div>
+
+          <div class="hero-visual-top">
+            <div class="assay-badge">
+              <span>XRF OLYMPUS VANTA</span>
+              <span>·</span>
+              <span class="assay-badge-gold" data-i18n="badge_no_acid">Sin cortes ni ácidos</span>
+            </div>
+            <div class="assay-badge">
+              <span class="spot-dot"></span>
+              <span id="badge-cash-desk-text" data-i18n="badge_cash_desk">Fondo de caja hasta $250,000</span>
+            </div>
+          </div>
+
+          <div class="hero-visual-bottom">
+            <div class="hero-visual-caption">
+              <h3 data-i18n="photo_caption_title">Una oferta real. En persona.</h3>
+              <p id="photo-caption-sub" data-i18n="photo_caption_sub">Báscula certificada de precisión Clase I (0.01 g) · Precio spot en tiempo real</p>
+            </div>
+            <div class="hero-live-scale-pill">
+              <span class="scale-pill-label" data-i18n="scale_pill_label">Oro 14K (585°) hoy</span>
+              <span class="scale-pill-value" id="hero-pill-585">$49.50 / g</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KEY GUARANTEES LEDGER STRIP -->
+  <div class="ledger-strip">
+    <div class="container">
+      <div class="ledger-grid">
+        <div class="ledger-cell">
+          <div class="ledger-num tabular">97.5%</div>
+          <div class="ledger-title" data-i18n="ledger_1_title">Sobre el precio spot de mercado</div>
+          <div class="ledger-desc" data-i18n="ledger_1_desc">Fórmula de tasación transparente ligada al fixing de bolsa internacional, sin comisiones ocultas por merma.</div>
+        </div>
+        <div class="ledger-cell">
+          <div class="ledger-num tabular">0.01 g</div>
+          <div class="ledger-title" data-i18n="ledger_2_title">Precisión metrológica certificada</div>
+          <div class="ledger-desc" data-i18n="ledger_2_desc">Básculas de laboratorio Ohaus con pantalla digital dual orientada al cliente y calibración periódica oficial.</div>
+        </div>
+        <div class="ledger-cell">
+          <div class="ledger-num tabular">15 seg</div>
+          <div class="ledger-title" data-i18n="ledger_3_title">Análisis espectral no destructivo</div>
+          <div class="ledger-desc" data-i18n="ledger_3_desc">Determinamos la composición exacta de la aleación mediante fluorescencia de rayos X sin rayar su pieza.</div>
+        </div>
+        <div class="ledger-cell">
+          <div class="ledger-num tabular">10–15 min</div>
+          <div class="ledger-title" data-i18n="ledger_4_title">Liquidación en efectivo o transferencia</div>
+          <div class="ledger-desc" data-i18n="ledger_4_desc">Pago en efectivo verificado con contador bancario, transferencia bancaria inmediata o criptoactivos (USDT).</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTERACTIVE CALCULATOR SECTION -->
+  <section class="section" id="calculator-section">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <span class="section-kicker" data-i18n="calc_kicker">01 / CALCULADORA INTERACTIVA DE PAGO</span>
+          <h2 class="section-title" data-i18n="calc_title">Cálculo de oferta vinculado al precio spot</h2>
+        </div>
+        <p class="section-subtitle" data-i18n="calc_subtitle">
+          Seleccione la pureza del oro, peso o modelo de reloj. Conozca su oferta neta y fije la cotización durante 3 horas mientras acude a nuestro despacho.
+        </p>
+      </div>
+
+      <div class="calc-shell">
+        <!-- 3 Mode Tabs -->
+        <div class="calc-tabs" role="tablist">
+          <button type="button" class="calc-tab active" data-tab="gold" role="tab">
+            <div>
+              <span class="calc-tab-title" data-i18n="tab_gold_title">Oro y Joyería Fina</span>
+              <span class="calc-tab-sub" data-i18n="tab_gold_sub">375° · 585° · 750° · 900° · 999.9°</span>
+            </div>
+            <span class="calc-tab-tag">AU</span>
+          </button>
+
+          <button type="button" class="calc-tab" data-tab="watches" role="tab">
+            <div>
+              <span class="calc-tab-title" data-i18n="tab_watches_title">Relojes Suizos de Lujo</span>
+              <span class="calc-tab-sub" data-i18n="tab_watches_sub">Rolex · Patek Philippe · AP · Cartier</span>
+            </div>
+            <span class="calc-tab-tag">CHRONO</span>
+          </button>
+
+          <button type="button" class="calc-tab" data-tab="silver" role="tab">
+            <div>
+              <span class="calc-tab-title" data-i18n="tab_silver_title">Plata, Platino y Monedas</span>
+              <span class="calc-tab-sub" data-i18n="tab_silver_sub">875° · 925° · 999° · Pt 950°</span>
+            </div>
+            <span class="calc-tab-tag">AG / PT</span>
+          </button>
+        </div>
+
+        <div class="calc-body">
+          <!-- LEFT: CONTROLS -->
+          <div class="calc-controls">
+
+            <!-- MODE 1: GOLD CONTROLS -->
+            <div id="panel-gold" class="calc-mode-panel">
+              <div class="control-group">
+                <div class="control-label-row">
+                  <span class="control-label" data-i18n="lbl_select_purity">1. Seleccione la pureza del oro (Quilates)</span>
+                  <span class="control-hint" id="purity-hint">Oro 14K (585) = 58.5% Au puro</span>
+                </div>
+                <div class="karat-grid" id="gold-karat-grid">
+                  <button type="button" class="karat-btn" data-purity="0.375" data-label="375° (9K)">
+                    <span class="karat-main">375°</span>
+                    <span class="karat-sub">9 Karat</span>
+                  </button>
+                  <button type="button" class="karat-btn" data-purity="0.500" data-label="500° (12K)">
+                    <span class="karat-main">500°</span>
+                    <span class="karat-sub">12 Karat</span>
+                  </button>
+                  <button type="button" class="karat-btn active" data-purity="0.585" data-label="585° (14K)">
+                    <span class="karat-main">585°</span>
+                    <span class="karat-sub">14 Karat</span>
+                  </button>
+                  <button type="button" class="karat-btn" data-purity="0.750" data-label="750° (18K)">
+                    <span class="karat-main">750°</span>
+                    <span class="karat-sub">18 Karat</span>
+                  </button>
+                  <button type="button" class="karat-btn" data-purity="0.900" data-label="900° (21.6K)">
+                    <span class="karat-main">900°</span>
+                    <span class="karat-sub">Monedas / 21K</span>
+                  </button>
+                  <button type="button" class="karat-btn" data-purity="0.999" data-label="999.9° (24K)">
+                    <span class="karat-main">999°</span>
+                    <span class="karat-sub">24K Lingote</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <div class="control-label-row">
+                  <span class="control-label" data-i18n="lbl_item_category">2. Tipo de pieza y categoría</span>
+                  <span class="control-hint" data-i18n="lbl_item_category_hint">Determina el factor de tasación</span>
+                </div>
+                <div class="category-pills" id="gold-category-grid">
+                  <button type="button" class="cat-pill active" data-mult="1.0" data-cat-id="jewelry">
+                    <span class="cat-pill-name" data-i18n="cat_jewelry">Joyería fina, cadenas, anillos</span>
+                    <span class="cat-pill-rate" data-i18n="cat_rate_base">Tarifa base</span>
+                  </button>
+                  <button type="button" class="cat-pill" data-mult="0.97" data-cat-id="scrap">
+                    <span class="cat-pill-name" data-i18n="cat_scrap">Oro chatarra / piezas rotas</span>
+                    <span class="cat-pill-rate" data-i18n="cat_rate_melt">Por metal fino</span>
+                  </button>
+                  <button type="button" class="cat-pill" data-mult="1.025" data-cat-id="bullion">
+                    <span class="cat-pill-name" data-i18n="cat_bullion">Lingotes y monedas de inversión</span>
+                    <span class="cat-pill-rate">+2.5% premium</span>
+                  </button>
+                  <button type="button" class="cat-pill" data-mult="1.18" data-cat-id="branded">
+                    <span class="cat-pill-name" data-i18n="cat_branded">Joyería de marca (Cartier, VCA)</span>
+                    <span class="cat-pill-rate">+18% por pieza</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <div class="control-label-row">
+                  <span class="control-label" data-i18n="lbl_weight">3. Peso total (en gramos)</span>
+                  <span class="control-hint" id="volume-tier-hint" data-i18n="lbl_tier_hint">A partir de 30 g aplica tarifa mayorista (+2%)</span>
+                </div>
+                <div class="weight-box">
+                  <div class="weight-top-row">
+                    <div class="weight-input-wrap">
+                      <input
+                        type="number"
+                        id="gold-weight-input"
+                        class="weight-number-input tabular"
+                        value="24.5"
+                        min="0.5"
+                        max="5000"
+                        step="0.5"
+                      />
+                      <span class="weight-unit-label" data-i18n="unit_grams">gramos (g)</span>
+                    </div>
+                    <div class="weight-presets">
+                      <button type="button" class="preset-chip" data-weight="5.5" data-i18n="preset_ring">5.5 g (Anillo)</button>
+                      <button type="button" class="preset-chip" data-weight="24.5" data-i18n="preset_chain">24.5 g (Cadena)</button>
+                      <button type="button" class="preset-chip" data-weight="31.1">31.1 g (1 oz)</button>
+                      <button type="button" class="preset-chip" data-weight="100" data-i18n="preset_bar">100 g (Lingote)</button>
+                    </div>
+                  </div>
+                  <input
+                    type="range"
+                    id="gold-weight-slider"
+                    class="range-slider"
+                    min="1"
+                    max="250"
+                    step="0.5"
+                    value="24.5"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- MODE 2: LUXURY WATCHES CONTROLS -->
+            <div id="panel-watches" class="calc-mode-panel" style="display: none;">
+              <div class="control-group">
+                <div class="control-label-row">
+                  <span class="control-label" data-i18n="lbl_watch_model">1. Seleccione la manufactura y referencia</span>
+                  <span class="control-hint" data-i18n="lbl_watch_index_hint">Índice en tiempo real Chrono24</span>
+                </div>
+                <select id="watch-model-select" class="custom-select">
+                  <option value="rolex_sub" data-usd="11200" data-name="Rolex Submariner Date 41mm (Ref. 126610LN)">Rolex — Submariner Date 41mm (Ref. 126610LN)</option>
+                  <option value="rolex_dj" data-usd="9400" data-name="Rolex Datejust 41 Fluted / Jubilee (Ref. 126334)">Rolex — Datejust 41 Fluted / Jubilee (Ref. 126334)</option>
+                  <option value="rolex_daytona" data-usd="24500" data-name="Rolex Cosmograph Daytona Steel (Ref. 116500LN)">Rolex — Cosmograph Daytona Steel (Ref. 116500LN)</option>
+                  <option value="rolex_gmt" data-usd="17800" data-name="Rolex GMT-Master II Pepsi (Ref. 126710BLRO)">Rolex — GMT-Master II "Pepsi" (Ref. 126710BLRO)</option>
+                  <option value="rolex_dd" data-usd="33500" data-name="Rolex Day-Date 40 Yellow Gold (Ref. 228238)">Rolex — Day-Date 40 Yellow Gold 18K (Ref. 228238)</option>
+                  <option value="ap_ro" data-usd="34000" data-name="Audemars Piguet Royal Oak 41mm (Ref. 15500ST)">Audemars Piguet — Royal Oak Selfwinding 41mm (Ref. 15500ST)</option>
+                  <option value="pp_nautilus" data-usd="82000" data-name="Patek Philippe Nautilus (Ref. 5711/1A-010)">Patek Philippe — Nautilus Steel (Ref. 5711/1A-010)</option>
+                  <option value="pp_aquanaut" data-usd="49000" data-name="Patek Philippe Aquanaut (Ref. 5167A-001)">Patek Philippe — Aquanaut 40mm (Ref. 5167A-001)</option>
+                  <option value="cartier_santos" data-usd="5600" data-name="Cartier Santos de Cartier Large (Ref. WSSA0018)">Cartier — Santos de Cartier Large (Ref. WSSA0018)</option>
+                  <option value="omega_speedy" data-usd="5100" data-name="Omega Speedmaster Moonwatch Co-Axial (Ref. 310.30.42.50)">Omega — Speedmaster Moonwatch Co-Axial (Ref. 310.30.42.50)</option>
+                </select>
+              </div>
+
+              <div class="control-group">
+                <div class="control-label-row">
+                  <span class="control-label" data-i18n="lbl_watch_set">2. Dotación (Caja y Documentación)</span>
+                </div>
+                <div class="category-pills" id="watch-set-grid">
+                  <button type="button" class="cat-pill active" data-set-mult="1.0" data-set-id="full">
+                    <span class="cat-pill-name" data-i18n="watch_set_full">Set Completo (Caja + Garantía)</span>
+                    <span class="cat-pill-rate">100% cotización</span>
+                  </button>
+                  <button type="button" class="cat-pill" data-set-mult="0.93" data-set-id="papers">
+                    <span class="cat-pill-name" data-i18n="watch_set_papers">Reloj + Documentos (sin caja)</span>
+                    <span class="cat-pill-rate">-7%</span>
+                  </button>
+                  <button type="button" class="cat-pill" data-set-mult="0.91" data-set-id="box">
+                    <span class="cat-pill-name" data-i18n="watch_set_box">Reloj + Caja (sin tarjeta)</span>
+                    <span class="cat-pill-rate">-9%</span>
+                  </button>
+                  <button type="button" class="cat-pill" data-set-mult="0.85" data-set-id="watch">
+                    <span class="cat-pill-name" data-i18n="watch_set_only">Solo el reloj (Watch only)</span>
+                    <span class="cat-pill-rate">-15%</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <div class="control-label-row">
+                  <span class="control-label" data-i18n="lbl_watch_cond">3. Estado de conservación</span>
+                </div>
+                <div class="category-pills" id="watch-cond-grid">
+                  <button type="button" class="cat-pill" data-cond-mult="1.06" data-cond-id="unworn">
+                    <span class="cat-pill-name" data-i18n="watch_cond_unworn">Nuevo / Sin estrenar (Unworn)</span>
+                    <span class="cat-pill-rate">+6% prima</span>
+                  </button>
+                  <button type="button" class="cat-pill active" data-cond-mult="1.0" data-cond-id="excellent">
+                    <span class="cat-pill-name" data-i18n="watch_cond_excellent">Excelente (sin pulido)</span>
+                    <span class="cat-pill-rate">Precio base</span>
+                  </button>
+                  <button type="button" class="cat-pill" data-cond-mult="0.92" data-cond-id="good">
+                    <span class="cat-pill-name" data-i18n="watch_cond_good">Marcas normales de uso</span>
+                    <span class="cat-pill-rate">-8%</span>
+                  </button>
+                  <button type="button" class="cat-pill" data-cond-mult="0.83" data-cond-id="service">
+                    <span class="cat-pill-name" data-i18n="watch_cond_service">Requiere revisión mecánica</span>
+                    <span class="cat-pill-rate">-17%</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- MODE 3: SILVER & PLATINUM CONTROLS -->
+            <div id="panel-silver" class="calc-mode-panel" style="display: none;">
+              <div class="control-group">
+                <div class="control-label-row">
+                  <span class="control-label" data-i18n="lbl_silver_metal">1. Seleccione metal y pureza</span>
+                </div>
+                <div class="category-pills" id="silver-metal-grid">
+                  <button type="button" class="cat-pill active" data-metal="ag925">
+                    <span class="cat-pill-name" data-i18n="silver_925">Plata 925° (Sterling / Joyas)</span>
+                    <span class="cat-pill-rate">Joyería / Cubertería</span>
+                  </button>
+                  <button type="button" class="cat-pill" data-metal="ag999">
+                    <span class="cat-pill-name" data-i18n="silver_999">Plata 999° (Lingotes y monedas)</span>
+                    <span class="cat-pill-rate">Inversión pura</span>
+                  </button>
+                  <button type="button" class="cat-pill" data-metal="ag875">
+                    <span class="cat-pill-name" data-i18n="silver_875">Plata 875° (Vintage y vajilla)</span>
+                    <span class="cat-pill-rate">Antigüedades</span>
+                  </button>
+                  <button type="button" class="cat-pill" data-metal="pt950">
+                    <span class="cat-pill-name" data-i18n="plat_950">Platino 950° (Platinum)</span>
+                    <span class="cat-pill-rate">Alta joyería / Lingotes</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <div class="control-label-row">
+                  <span class="control-label" data-i18n="lbl_silver_weight">2. Peso del lote (en gramos)</span>
+                </div>
+                <div class="weight-box">
+                  <div class="weight-top-row">
+                    <div class="weight-input-wrap">
+                      <input
+                        type="number"
+                        id="silver-weight-input"
+                        class="weight-number-input tabular"
+                        value="250"
+                        min="5"
+                        max="25000"
+                        step="5"
+                      />
+                      <span class="weight-unit-label" data-i18n="unit_grams">gramos (g)</span>
+                    </div>
+                    <div class="weight-presets">
+                      <button type="button" class="preset-chip silver-preset" data-sweight="50">50 g</button>
+                      <button type="button" class="preset-chip silver-preset" data-sweight="250" data-i18n="preset_set">250 g (Juego)</button>
+                      <button type="button" class="preset-chip silver-preset" data-sweight="1000" data-i18n="preset_kilo">1 000 g (1 kg)</button>
+                    </div>
+                  </div>
+                  <input
+                    type="range"
+                    id="silver-weight-slider"
+                    class="range-slider"
+                    min="10"
+                    max="2000"
+                    step="10"
+                    value="250"
+                  />
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- RIGHT: TRANSPARENT ASSAY RECEIPT -->
+          <div class="calc-receipt">
+            <div>
+              <div class="receipt-header">
+                <span class="receipt-title" data-i18n="receipt_header">ESPECIFICACIÓN DE LA OFERTA</span>
+                <span class="receipt-status">
+                  <span class="spot-dot"></span>
+                  <span data-i18n="receipt_live">Cotización spot oficial</span>
+                </span>
+              </div>
+
+              <div class="receipt-rows">
+                <div class="receipt-row">
+                  <span class="receipt-row-label" id="rec-label-1" data-i18n="rec_lbl_1">Activo y pureza</span>
+                  <span class="receipt-row-val" id="rec-val-1">Oro 585° (14K)</span>
+                </div>
+                <div class="receipt-row">
+                  <span class="receipt-row-label" id="rec-label-2" data-i18n="rec_lbl_2">Categoría de tasación</span>
+                  <span class="receipt-row-val" id="rec-val-2">Joyería fina</span>
+                </div>
+                <div class="receipt-row">
+                  <span class="receipt-row-label" id="rec-label-3" data-i18n="rec_lbl_3">Contenido de metal fino</span>
+                  <span class="receipt-row-val" id="rec-val-3">14.33 g Au 999.9</span>
+                </div>
+                <div class="receipt-row">
+                  <span class="receipt-row-label" id="rec-label-4" data-i18n="rec_lbl_4">Precio neto por 1g</span>
+                  <span class="receipt-row-val" id="rec-val-4">$49.50 / g</span>
+                </div>
+                <div class="receipt-row">
+                  <span class="receipt-row-label" id="rec-label-5" data-i18n="rec_lbl_5">Deducciones por merma</span>
+                  <span class="receipt-row-val" style="color: var(--spot-up);" data-i18n="rec_no_deductions">0% (Sin deducciones)</span>
+                </div>
+              </div>
+
+              <div class="receipt-payout-box">
+                <span class="payout-label" data-i18n="payout_label">OFERTA NETA ESTIMADA EN EL ACTO</span>
+                <div class="payout-amount tabular" id="final-payout-display">$1,212.75</div>
+                <div class="payout-sub">
+                  <span data-i18n="payout_method">Efectivo en caja, transferencia wire o USDT</span>
+                  <span class="mono" id="payout-rate-percent">95.2% del spot</span>
+                </div>
+              </div>
+
+              <div class="loan-alternative-box">
+                <div class="loan-alt-text">
+                  <strong data-i18n="loan_alt_title">¿Prefiere no vender su pieza definitivamente?</strong>
+                  <span data-i18n="loan_alt_sub">Disponible como préstamo garantizado en bóveda asegurada (0.28% diario)</span>
+                </div>
+                <div class="loan-alt-val tabular" id="loan-payout-display">$1,067.00</div>
+              </div>
+            </div>
+
+            <div>
+              <div class="receipt-actions">
+                <button type="button" class="btn-gold" id="lock-offer-btn">
+                  <span data-i18n="btn_lock_rate">Fijar cotización por 3 horas</span>
+                  <span>→</span>
+                </button>
+                <button type="button" class="btn-outline-gold" id="send-calc-whatsapp-btn">
+                  <span data-i18n="btn_send_calc">Enviar cálculo a mi WhatsApp</span>
+                </button>
+              </div>
+              <p class="receipt-footnote" data-i18n="receipt_footnote">
+                * Al fijar la cotización se emite un código de reserva: si el oro baja mientras viene a la oficina, le pagamos el valor acordado.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIVE BUYING RATES BOARD (PRICE PER 1 GRAM) -->
+  <section class="section" id="rates-section">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <span class="section-kicker" data-i18n="rates_kicker">02 / PIZARRA OFICIAL DE COMPRA</span>
+          <h2 class="section-title" data-i18n="rates_title">Precios de compra de oro por gramo</h2>
+        </div>
+        <p class="section-subtitle" data-i18n="rates_subtitle">
+          Precios netos transparentes vinculados al fixing internacional. Haga clic en cualquier pureza para cargarla en la calculadora.
+        </p>
+      </div>
+
+      <div class="rates-table-wrap">
+        <table class="rates-table">
+          <thead>
+            <tr>
+              <th data-i18n="th_purity">Pureza / Quilates</th>
+              <th data-i18n="th_examples">Piezas habituales</th>
+              <th data-i18n="th_std">Estándar (< 30g)</th>
+              <th data-i18n="th_vip">Mayoristas (30g+)</th>
+              <th data-i18n="th_bullion">Lingotes / Marcas</th>
+              <th data-i18n="th_action">Acción</th>
+            </tr>
+          </thead>
+          <tbody id="rates-table-body">
+            <!-- Populated dynamically by app.js -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 CORE DIRECTIONS: WHAT WE BUY & LOANS -->
+  <section class="section" id="categories-section">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <span class="section-kicker" data-i18n="dirs_kicker">03 / ESPECIALIZACIÓN DE NUESTRA OFICINA</span>
+          <h2 class="section-title" data-i18n="dirs_title">Cuatro áreas de gestión de activos de lujo</h2>
+        </div>
+        <p class="section-subtitle" data-i18n="dirs_subtitle">
+          Evaluamos no solo el peso del metal puro, sino la liquidez relojera, diamantes certificados y valor coleccionable.
+        </p>
+      </div>
+
+      <div class="categories-grid">
+        <div class="category-card">
+          <div>
+            <span class="cat-index">01 / AU · ORO Y LINGOTES</span>
+            <h3 class="cat-title" data-i18n="card_1_title">Oro de joyería, chatarra, monedas y lingotes</h3>
+            <p class="cat-desc" data-i18n="card_1_desc">
+              Aceptamos piezas de 10K, 14K, 18K y 24K, cadenas rotas, oro dental, así como lingotes de banco certificados (PAMP, Valcambi, Argor) y monedas bullion (American Eagle, Krugerrand, Maple Leaf).
+            </p>
+          </div>
+          <div class="cat-specs">
+            <div class="cat-spec-item">
+              <span class="cat-spec-key" data-i18n="spec_1_k1">Método de ensayo</span>
+              <span class="cat-spec-val" data-i18n="spec_1_v1">Espectrómetro XRF Olympus Vanta</span>
+            </div>
+            <div class="cat-spec-item">
+              <span class="cat-spec-key" data-i18n="spec_1_k2">Lingotes sin certificado</span>
+              <span class="cat-spec-val" data-i18n="spec_1_v2">Compramos según ley 999.9° sin penalización</span>
+            </div>
+            <div class="cat-spec-item">
+              <span class="cat-spec-key" data-i18n="spec_1_k3">Piedras engastadas</span>
+              <span class="cat-spec-val" data-i18n="spec_1_v3">Se tasan aparte o se devuelven intactas</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="category-card">
+          <div>
+            <span class="cat-index">02 / HOROLOGY · RELOJES SUIZOS</span>
+            <h3 class="cat-title" data-i18n="card_2_title">Alta relojería suiza y cronógrafos de lujo</h3>
+            <p class="cat-desc" data-i18n="card_2_desc">
+              Compramos Rolex, Patek Philippe, Audemars Piguet, Vacheron Constantin, Cartier y Omega. Inspección técnica realizada por maestro relojero sin comprometer la estanqueidad de la caja.
+            </p>
+          </div>
+          <div class="cat-specs">
+            <div class="cat-spec-item">
+              <span class="cat-spec-key" data-i18n="spec_2_k1">Referencia de mercado</span>
+              <span class="cat-spec-val" data-i18n="spec_2_v1">Transacciones reales Chrono24 y bolsas privadas</span>
+            </div>
+            <div class="cat-spec-item">
+              <span class="cat-spec-key" data-i18n="spec_2_k2">Sin caja ni papeles</span>
+              <span class="cat-spec-val" data-i18n="spec_2_v2">Aceptamos tras verificación en registros oficiales</span>
+            </div>
+            <div class="cat-spec-item">
+              <span class="cat-spec-key" data-i18n="spec_2_k3">Moneda de pago</span>
+              <span class="cat-spec-val" data-i18n="spec_2_v3">USD · EUR · RUB · USDT en el mismo día</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="category-card">
+          <div>
+            <span class="cat-index">03 / GIA & MAISON · DIAMANTES Y FIRMAS</span>
+            <h3 class="cat-title" data-i18n="card_3_title">Diamantes GIA desde 0.30 ct y joyería de firmas</h3>
+            <p class="cat-desc" data-i18n="card_3_desc">
+              No tratamos piezas de Cartier, Van Cleef & Arpels, Bvlgari o Graff como simple oro para fundir. Diamantes certificados y sueltos valorados según el listado internacional Rapaport.
+            </p>
+          </div>
+          <div class="cat-specs">
+            <div class="cat-spec-item">
+              <span class="cat-spec-key" data-i18n="spec_3_k1">Equipo gemológico</span>
+              <span class="cat-spec-val" data-i18n="spec_3_v1">Yehuda Sherlock Holmes / Presidium</span>
+            </div>
+            <div class="cat-spec-item">
+              <span class="cat-spec-key" data-i18n="spec_3_k2">Prima por firma</span>
+              <span class="cat-spec-val" data-i18n="spec_3_v2">Hasta +45% sobre el valor del metal</span>
+            </div>
+            <div class="cat-spec-item">
+              <span class="cat-spec-key" data-i18n="spec_3_k3">Gemas sin certificado</span>
+              <span class="cat-spec-val" data-i18n="spec_3_v3">Diagnóstico gratuito en presencia del cliente</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="category-card">
+          <div>
+            <span class="cat-index">04 / LENDING · PRÉSTAMOS PRENDARIOS</span>
+            <h3 class="cat-title" data-i18n="card_4_title">Liquidez mediante préstamos con garantía prendaria</h3>
+            <p class="cat-desc" data-i18n="card_4_desc">
+              Si necesita liquidez temporal sin desprenderse de sus activos: préstamo prendario en 15 minutos. Sus piezas se precintan en su presencia y quedan en bóveda acorazada asegurada.
+            </p>
+          </div>
+          <div class="cat-specs">
+            <div class="cat-spec-item">
+              <span class="cat-spec-key" data-i18n="spec_4_k1">Historial crediticio</span>
+              <span class="cat-spec-val" data-i18n="spec_4_v1">Sin verificación en burós de crédito</span>
+            </div>
+            <div class="cat-spec-item">
+              <span class="cat-spec-key" data-i18n="spec_4_k2">Seguro de custodia</span>
+              <span class="cat-spec-val" data-i18n="spec_4_v2">100% del valor de tasación cubierto</span>
+            </div>
+            <div class="cat-spec-item">
+              <span class="cat-spec-key" data-i18n="spec_4_k3">Cancelación anticipada</span>
+              <span class="cat-spec-val" data-i18n="spec_4_v3">En cualquier momento sin penalización</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRANSPARENT APPRAISAL PROTOCOL & COMPARISON -->
+  <section class="section" id="protocol-section">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <span class="section-kicker" data-i18n="proto_kicker">04 / PROTOCOLO DE TASACIÓN</span>
+          <h2 class="section-title" data-i18n="proto_title">Cómo funciona su visita y por qué pagamos más</h2>
+        </div>
+        <p class="section-subtitle" data-i18n="proto_subtitle">
+          El proceso toma entre 10 y 15 minutos en un despacho privado y confidencial, con máxima seguridad.
+        </p>
+      </div>
+
+      <div class="protocol-split">
+        <!-- Left: 4 Steps -->
+        <div class="steps-list">
+          <div class="step-row">
+            <div class="step-num">01</div>
+            <div>
+              <h3 class="step-title" data-i18n="step_1_title">Visita sin cita o bloqueo de cotización online</h3>
+              <p class="step-text" data-i18n="step_1_text">
+                Llegue cuando le convenga con su documento de identidad. Servicio de seguridad privado y atención individualizada en sala privada.
+              </p>
+            </div>
+          </div>
+
+          <div class="step-row">
+            <div class="step-num">02</div>
+            <div>
+              <h3 class="step-title" data-i18n="step_2_title">Análisis espectral XRF y pesaje certificado</h3>
+              <p class="step-text" data-i18n="step_2_text">
+                En su presencia verificamos la ley del metal con espectrómetro Olympus Vanta. Cero ácidos ni cortes. La pantalla de la balanza siempre visible.
+              </p>
+            </div>
+          </div>
+
+          <div class="step-row">
+            <div class="step-num">03</div>
+            <div>
+              <h3 class="step-title" data-i18n="step_3_title">Propuesta abierta según el fixing de bolsa</h3>
+              <p class="step-text" data-i18n="step_3_text">
+                Recibe un desglose por escrito con peso exacto y precio por gramo. Si no le convence, recupera sus piezas de inmediato. La tasación es 100% gratuita.
+              </p>
+            </div>
+          </div>
+
+          <div class="step-row">
+            <div class="step-num">04</div>
+            <div>
+              <h3 class="step-title" data-i18n="step_4_title">Liquidación inmediata en ventanilla</h3>
+              <p class="step-text" data-i18n="step_4_text">
+                Si acepta, formalizamos el recibo legal de compra. Efectivo contado en caja o transferencia wire inmediata a su cuenta bancaria.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Comparison Card -->
+        <div class="comparison-card">
+          <div class="comp-header">
+            <h3 class="comp-title" data-i18n="comp_title">Nuestra oficina frente a casas de empeño convencionales</h3>
+            <p class="comp-sub" data-i18n="comp_sub">Comparativa real con una cadena de oro 14K (585) de 35 gramos</p>
+          </div>
+
+          <div class="comp-item">
+            <div class="comp-topic" data-i18n="comp_t1">01 / ENSAYO DE PUREZA DEL METAL</div>
+            <div class="comp-vs-grid">
+              <div class="comp-bad">
+                <strong data-i18n="comp_bad_1_t">Comercio tradicional:</strong>
+                <span data-i18n="comp_bad_1_d">limado profundo con raspador y ácido nítrico (daña el acabado de su joya).</span>
+              </div>
+              <div class="comp-good">
+                <strong data-i18n="comp_good_1_t">Nuestra oficina:</strong>
+                <span data-i18n="comp_good_1_d">espectrometría XRF en 15 segundos: 0% alteraciones físicas en su pieza.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="comp-item">
+            <div class="comp-topic" data-i18n="comp_t2">02 / DEDUCCIONES OCULTAS SOBRE EL PESO</div>
+            <div class="comp-vs-grid">
+              <div class="comp-bad">
+                <strong data-i18n="comp_bad_2_t">Comercio tradicional:</strong>
+                <span data-i18n="comp_bad_2_d">descuentan entre 5% y 8% por «soldaduras, suciedad y muelle del cierre».</span>
+              </div>
+              <div class="comp-good">
+                <strong data-i18n="comp_good_2_t">Nuestra oficina:</strong>
+                <span data-i18n="comp_good_2_d">0% comisiones por merma. Abonamos cada 0.01 g de peso bruto contrastado.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="comp-item">
+            <div class="comp-topic" data-i18n="comp_t3">03 / VALORACIÓN DE GEMAS Y MARCAS</div>
+            <div class="comp-vs-grid">
+              <div class="comp-bad">
+                <strong data-i18n="comp_bad_3_t">Comercio tradicional:</strong>
+                <span data-i18n="comp_bad_3_d">anillos de firma y diamantes se computan a precio de chatarra o se descartan.</span>
+              </div>
+              <div class="comp-good">
+                <strong data-i18n="comp_good_3_t">Nuestra oficina:</strong>
+                <span data-i18n="comp_good_3_d">tasador gemológico abona sobreprecio por diamantes y manufactura de lujo.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="comp-item">
+            <div class="comp-topic" data-i18n="comp_t4">04 / PRIVACIDAD Y LÍMITES DE CAJA</div>
+            <div class="comp-vs-grid">
+              <div class="comp-bad">
+                <strong data-i18n="comp_bad_4_t">Comercio tradicional:</strong>
+                <span data-i18n="comp_bad_4_d">mostrador expuesto a la calle con rejas; fondos limitados a montos pequeños.</span>
+              </div>
+              <div class="comp-good">
+                <strong data-i18n="comp_good_4_t">Nuestra oficina:</strong>
+                <span data-i18n="comp_good_4_d">despacho blindado privado, parking custodiado y reserva de caja inmediata de hasta $250k.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ONLINE PHOTO APPRAISAL & OFFICE CONTACTS -->
+  <section class="section" id="contact-section">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <span class="section-kicker" data-i18n="contact_kicker">05 / VALORACIÓN POR FOTO Y CONTACTO</span>
+          <h2 class="section-title" data-i18n="contact_title">Conozca el valor antes de venir a la oficina</h2>
+        </div>
+        <p class="section-subtitle" data-i18n="contact_subtitle">
+          Envíe fotos de sus piezas, sellos de pureza o reloj. Un tasador experto le responderá en 5 minutos con una oferta formal.
+        </p>
+      </div>
+
+      <div class="contact-grid">
+        <!-- Left: Photo Appraisal Form -->
+        <div class="appraisal-form-card">
+          <div style="margin-bottom: 20px;">
+            <h3 style="font-size: 20px; font-weight: 700;" data-i18n="form_title">Tasación exprés por foto en 5 minutos</h3>
+          </div>
+
+          <form id="lead-form">
+            <div class="form-row-2">
+              <div class="form-field">
+                <label class="field-label" for="lead-name" data-i18n="lbl_your_name">Su nombre</label>
+                <input type="text" id="lead-name" class="text-input" placeholder="Carlos" required />
+              </div>
+              <div class="form-field">
+                <label class="field-label" for="lead-phone" data-i18n="lbl_your_phone">Teléfono (WhatsApp / Celular)</label>
+                <input type="tel" id="lead-phone" class="text-input mono" placeholder="+1 (305) 000-0000" required />
+              </div>
+            </div>
+
+            <div class="form-field">
+              <label class="field-label" for="lead-desc" data-i18n="lbl_item_desc">Descripción de la pieza, pureza o referencia del reloj</label>
+              <textarea
+                id="lead-desc"
+                rows="3"
+                class="textarea-input"
+                placeholder="Ejemplo: Cadena de oro 14K de 24.5 g, lingote de 1 oz o reloj Rolex Submariner..."
+              ></textarea>
+            </div>
+
+            <div class="form-field">
+              <label class="field-label" data-i18n="lbl_attach_photo">Fotografías de las piezas o contrastes (opcional)</label>
+              <div class="upload-dropzone" id="mock-upload-zone">
+                <span class="mono" style="font-size: 12px; color: var(--gold-primary);" id="upload-status-text" data-i18n="upload_placeholder">
+                  + Adjuntar fotos (JPG, PNG, HEIC) o arrastre aquí
+                </span>
+                <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;" data-i18n="upload_security">
+                  Información confidencial cifrada de extremo a extremo
+                </p>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-gold" style="width: 100%; padding: 15px;">
+              <span data-i18n="btn_submit_form">Solicitar tasación y fijar cotización</span>
+              <span>→</span>
+            </button>
+
+            <div id="form-success-banner" style="display: none; margin-top: 16px; padding: 16px; background: rgba(70, 167, 111, 0.12); border: 1px solid var(--spot-up); border-radius: 8px; font-size: 13px;">
+              <strong style="color: var(--spot-up); display: block; margin-bottom: 4px;" id="success-code-title">
+                ✓ Cotización #AU-8492 fijada con éxito por 3 horas
+              </strong>
+              <span style="color: var(--text-primary);" id="success-code-desc">
+                Nuestro especialista revisa sus datos y le responderá por WhatsApp / SMS en menos de 5 minutos.
+              </span>
+            </div>
+          </form>
+        </div>
+
+        <!-- Right: Showroom Details -->
+        <div class="office-info-card">
+          <div>
+            <span class="section-kicker" style="margin-bottom: 6px;">SHOWROOM & CASH DESK</span>
+            <h3 style="font-size: 24px; font-weight: 700; margin-bottom: 8px;" data-i18n="office_card_title">
+              Despacho privado en el centro financiero
+            </h3>
+            <p style="font-size: 14px; color: var(--text-secondary);" data-i18n="office_card_sub">
+              Privacidad absoluta: acceso discreto sin carteles llamativos, estacionamiento vigilado y sala de operaciones blindada.
+            </p>
+
+            <div class="office-details-list">
+              <div class="office-detail-row">
+                <div class="office-detail-label" data-i18n="lbl_office_addr">DIRECCIÓN DE LA OFICINA</div>
+                <div class="office-detail-value" id="contact-address-val">174 E Flagler St, Downtown Miami, FL 33131</div>
+                <div class="office-detail-sub" id="contact-parking-val">Estacionamiento privado con valet previo aviso de 15 minutos</div>
+              </div>
+
+              <div class="office-detail-row">
+                <div class="office-detail-label" data-i18n="lbl_office_hours">HORARIO DE ATENCIÓN</div>
+                <div class="office-detail-value" id="contact-hours-val">Lunes a Sábado: 9:00 AM – 8:00 PM</div>
+                <div class="office-detail-sub" id="contact-sun-val">Domingo: previa cita para operaciones superiores a $10,000</div>
+              </div>
+
+              <div class="office-detail-row">
+                <div class="office-detail-label" data-i18n="lbl_office_phone">LÍNEA DIRECTA DEL TASADOR</div>
+                <div class="office-detail-value mono" id="contact-phone-val">+1 (305) 555-0194</div>
+                <div class="office-detail-sub" data-i18n="contact_response_time">Atención inmediata por WhatsApp en 2–3 minutos</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <a href="https://wa.me/13055550194" target="_blank" rel="noopener" class="btn-outline-gold" style="text-align: center;">
+              <span>💬 WhatsApp</span>
+            </a>
+            <a href="https://t.me/" target="_blank" rel="noopener" class="btn-outline-gold" style="text-align: center;">
+              <span>✈️ Telegram</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>
+        <span class="mono" style="color: var(--text-secondary);" data-i18n="footer_legal">AU 999.9 · PRIVATE ASSAY & BUYING DESK</span>
+        <p style="margin-top: 4px;" data-i18n="footer_disclaimer">
+          Todas las tasaciones son conformes a los estándares internacionales de ensayo y metrología (LBMA / COMEX). Operaciones formalizadas con documento de identidad oficial.
+        </p>
+      </div>
+      <div class="mono" style="font-size: 12px; color: var(--text-muted);">
+        <span data-i18n="footer_copy">© 2026. Private Bullion & Timepiece Vault. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+  </div><!-- /.page-content -->
+
+  <!-- MODAL FOR LOCKING RATE / WHATSAPP QUICK ESTIMATE -->
+  <div class="modal-backdrop" id="offer-modal">
+    <div class="modal-card">
+      <button type="button" class="modal-close" id="close-modal-btn" aria-label="Cerrar">✕</button>
+      <span class="section-kicker" style="margin-bottom: 6px;" data-i18n="modal_kicker">FIJACIÓN DE TASA POR 3 HORAS</span>
+      <h3 style="font-size: 22px; font-weight: 700; margin-bottom: 10px;" id="modal-heading" data-i18n="modal_title">
+        Bloquear cotización con su número
+      </h3>
+      <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 18px;" id="modal-summary-text" data-i18n="modal_desc">
+        Recibirá el desglose oficial en su WhatsApp junto con el pase al estacionamiento privado.
+      </p>
+
+      <div style="background: var(--bg-obsidian); border: 1px solid var(--gold-border); border-radius: 8px; padding: 14px 16px; margin-bottom: 18px; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <span style="font-size: 11px; color: var(--text-muted); display: block;" id="modal-item-label">Oro 14K (585°) · 24.5 g</span>
+          <strong class="mono" style="font-size: 20px; color: var(--gold-primary);" id="modal-item-payout">$1,212.75</strong>
+        </div>
+        <span class="mono" style="font-size: 11px; color: var(--spot-up); background: var(--spot-up-bg); padding: 4px 8px; border-radius: 4px;" data-i18n="modal_badge">
+          Bloqueo 3 horas
+        </span>
+      </div>
+
+      <form id="modal-form">
+        <div class="form-field">
+          <label class="field-label" for="modal-phone" data-i18n="lbl_your_phone">Número de teléfono (WhatsApp / Celular)</label>
+          <input type="tel" id="modal-phone" class="text-input mono" placeholder="+1 (305) 000-0000" required />
+        </div>
+        <button type="submit" class="btn-gold" style="width: 100%; padding: 14px;">
+          <span data-i18n="btn_get_code">Obtener código de reserva de tasa →</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
