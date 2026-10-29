@@ -1,11 +1,11 @@
 // ==========================================
-// 1. STATE & PARAMS (100% USD ONLY · DEFAULT SPANISH)
+// 1. STATE & PARAMS (100% USD ONLY · DEFAULT ENGLISH)
 // ==========================================
 const urlParams = new URLSearchParams(window.location.search);
-const initialLang = urlParams.get('lang') || 'es'; // Default language: Spanish
+const initialLang = urlParams.get('lang') || 'en'; // Default language: English
 
 const STATE = {
-  lang: ['es', 'en', 'ru'].includes(initialLang) ? initialLang : 'es',
+  lang: ['en', 'es', 'ru'].includes(initialLang) ? initialLang : 'en',
   calcTab: 'gold',
   dealerMargin: 4.8, // 4.8% below spot
 
@@ -754,22 +754,46 @@ function updateUI() {
 
   // Address and contact details (Miami)
   const contactAddrEl = document.getElementById('contact-address-val');
+  const contactParkingEl = document.getElementById('contact-parking-val');
   const contactHoursEl = document.getElementById('contact-hours-val');
+  const contactSunEl = document.getElementById('contact-sun-val');
   const contactPhoneEl = document.getElementById('contact-phone-val');
   const heroAddressEl = document.getElementById('hero-address-line');
   const badgeCashEl = document.getElementById('badge-cash-desk-text');
+  const leadNameEl = document.getElementById('lead-name');
+  const leadDescEl = document.getElementById('lead-desc');
 
   heroAddressEl.textContent = STATE.lang === 'es'
     ? '174 E Flagler St, Miami · Lun–Sáb, 9:00–20:00 · Sala de Seguridad Privada'
     : (STATE.lang === 'en' ? '174 E Flagler St, Miami · Mon–Sat, 9AM–8PM · Private Security Desk' : '174 E Flagler St, Майами · Пн–Сб, 9:00–20:00 · Приватный офис');
   contactAddrEl.textContent = '174 E Flagler St, Downtown Miami, FL 33131';
+  if (contactParkingEl) {
+    contactParkingEl.textContent = STATE.lang === 'es'
+      ? 'Estacionamiento privado con valet previo aviso de 15 minutos'
+      : (STATE.lang === 'en' ? 'Complimentary private valet parking with 15-minute notice' : 'Бесплатный гостевой паркинг по звонку за 15 минут до визита');
+  }
   contactHoursEl.textContent = STATE.lang === 'es'
     ? 'Lunes a Sábado: 9:00 AM – 8:00 PM'
     : (STATE.lang === 'en' ? 'Monday – Saturday: 9:00 AM – 8:00 PM' : 'Понедельник – Суббота: 9:00 – 20:00');
+  if (contactSunEl) {
+    contactSunEl.textContent = STATE.lang === 'es'
+      ? 'Domingo: previa cita para operaciones superiores a $10,000'
+      : (STATE.lang === 'en' ? 'Sunday: by private appointment for transactions over $10,000' : 'Воскресенье: по предварительной записи для сделок от $10,000');
+  }
   contactPhoneEl.textContent = '+1 (305) 555-0194';
   if (badgeCashEl) badgeCashEl.textContent = STATE.lang === 'es'
     ? 'Fondo de caja hasta $250,000'
     : (STATE.lang === 'en' ? 'Cash desk up to $250,000 on site' : 'Касса до $250,000 в день');
+  if (leadNameEl) {
+    leadNameEl.placeholder = STATE.lang === 'es' ? 'Carlos' : (STATE.lang === 'en' ? 'Michael' : 'Александр');
+  }
+  if (leadDescEl) {
+    leadDescEl.placeholder = STATE.lang === 'es'
+      ? 'Ejemplo: Cadena de oro 14K de 24.5 g, lingote de 1 oz o reloj Rolex Submariner...'
+      : (STATE.lang === 'en'
+        ? 'Example: 14K gold chain 24.5g, 1 oz gold bar, or Rolex Submariner 126610LN...'
+        : 'Например: золотая цепь 14K (585) 24.5 г, слиток 1 oz или часы Rolex Submariner...');
+  }
 
   // Active classes on language switchers
   document.querySelectorAll('.lang-switch .switch-btn').forEach((b) => {
